@@ -1,17 +1,19 @@
+import java.util.ArrayList;
+
 class Book {
 
   private String name;
-  private Author author;
+  private Author[] author;
   private double price;
   private int qty = 0;
 
-  public Book(String name, Author author, double price) {
+  public Book(String name, Author[] author, double price) {
     this.name = name;
     this.author = author;
     this.price = price;
   }
 
-  public Book(String name, Author author, double price, int qty) {
+  public Book(String name, Author[] author, double price, int qty) {
     this.name = name;
     this.author = author;
     this.price = price;
@@ -22,7 +24,7 @@ class Book {
     return this.name;
   }
 
-  public Author getAuthor() {
+  public Author[] getAuthors() {
     return this.author;
   }
 
@@ -42,11 +44,20 @@ class Book {
     this.qty = qty;
   }
 
+  public ArrayList<String> getAuthorNames() {
+    ArrayList<String> authorNameList = new ArrayList<String>();
+    for (Author person: this.author) {
+      authorNameList.add(person.getName());
+    }
+    return authorNameList;
+  }
+
+  @Override
   public String toString() {
     return "Book [name=" +
       this.name +
       ", authors=" +
-      this.author.toString() +
+      this.getAuthorNames() +
       ", price=" +
       this.price
       + ", qty=" +

@@ -30,7 +30,7 @@ class Author {
     this.email = email;
   }
 
-  public void setGendet(char gender) {
+  public void setGender(char gender) {
     this.gender = gender;
   }
 
