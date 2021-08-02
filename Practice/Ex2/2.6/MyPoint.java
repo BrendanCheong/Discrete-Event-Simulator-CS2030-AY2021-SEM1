@@ -66,4 +66,11 @@ class MyPoint {
     return Math.sqrt(firstXsquare + firstYsquare);
   }
 
+  public MyPoint midPoint(MyPoint another) {
+    double Xcoord = (this.getX() + another.getX()) / 2;
+    double Ycoord = (this.getY() + another.getY()) / 2;
+    MyPoint midPoint = new MyPoint(Xcoord, Ycoord);
+    return midPoint;
+  }
+
 }
