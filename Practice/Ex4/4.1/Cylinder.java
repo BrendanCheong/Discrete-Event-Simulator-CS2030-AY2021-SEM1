@@ -28,8 +28,18 @@ public class Cylinder extends Circle {
     this.height = height;
   }
 
-  public double getVolume() {
-    return this.getHeight() * this.getArea();
+  @Override
+  // this is to get SURFACE AREA of the Cylinder
+  public double getArea() {
+    return (super.getArea() * 2) +
+      (2 * Math.PI * this.getHeight() * this.getRadius());
   }
+
+  public double getVolume() {
+    return this.getHeight() * super.getArea();
+  }
+  // We want to use override Circle's getArea with our own Surface Area Equation
+  // However, getVolume must use Circle's getArea not this(our Surface Area)
+  // so we use super.getArea to solve this
 
 }
