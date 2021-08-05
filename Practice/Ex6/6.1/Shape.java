@@ -28,19 +28,15 @@ public abstract class Shape {
         this.filled = filled;
     }
 
-    public abstract double getArea() {
+    public abstract double getArea();
 
-    }
+    public abstract double getPerimeter();
 
-    public abstract double getPerimeter() {
-
-    }
-
-    public abstract String toString() {
+    public String toString() {
         return "Shape[color=" +
         this.getColor() +
         ", filled=" +
-        this.getFilled() +
+        this.isFilled() +
         "]";
     }
 }
