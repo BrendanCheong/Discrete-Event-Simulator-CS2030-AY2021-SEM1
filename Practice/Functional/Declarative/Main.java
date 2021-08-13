@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 public class Main {
 
@@ -28,6 +29,14 @@ public class Main {
             .filter(item -> item.getGender().equals(female))
             .collect(Collectors.toList());
         females.forEach(System.out::println);
+
+        // Replace the filter with a Predicate(anon Boolean Function)
+        Predicate<Person> personPredicate = person -> person.getGender().equals(female);
+
+        List<Person> females2 = people.stream()
+            .filter(personPredicate)
+            .collect(Collectors.toList());
+        females2.forEach(System.out::println);
     }
 
 }
