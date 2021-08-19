@@ -8,15 +8,15 @@ public class Circle {
         this.radius = radius;
     }
 
-    public Point getCentre() {
+    private Point getCentre() {
         return this.centre;
     }
 
-    public double getRadius() {
+    private double getRadius() {
         return this.radius;
     }
 
-    public Circle getCircle(Point centre, double radius) {
+    private Circle getCircle(Point centre, double radius) {
         return new Circle(centre, radius);
     }
 
