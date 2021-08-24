@@ -22,7 +22,8 @@ public class Circle {
 
     @Override
     public String toString() {
-        return String.format("Circle of radius %.3f and centre of %s", getCentre(), getRadius());
+        return String.format("circle of radius %.1f centered at ", getRadius()) +
+            getCentre().toString();
     }
 
 }

@@ -29,6 +29,18 @@ public class Point {
     }
 
     /**
+     * Gets the distance from a point to another point as double.
+     * @param p is the target point to be calculated against
+     * @return the distance between the current point against target point
+     *
+     */
+    public double distanceTo(Point p) {
+        double distanceX = Math.abs(this.x - p.x);
+        double distanceY = Math.abs(this.y - p.y);
+        return Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+    }
+
+    /**
      * Gets the angle between the current Point and the input point.
      * uses the arctan java Math method
      * @param p takes in the input point
@@ -38,6 +50,19 @@ public class Point {
         double coordinateX = p.getX() - getX();
         double coordinateY = p.getY() - getY();
         return Math.atan2(coordinateY, coordinateX);
+    }
+
+    /**
+     * Moves the current point to a new point based on angle and distance.
+     * @param theta takes in a double radian
+     * @param d takes in a double distance d
+     * @return the new moved point after taking the inputs
+     */
+
+    public Point moveTo(double theta, double d) {
+        double coordinateX = this.x + (d * Math.cos(theta));
+        double coordinateY = this.y + (d * Math.sin(theta));
+        return new Point(coordinateX, coordinateY);
     }
 
     @Override
