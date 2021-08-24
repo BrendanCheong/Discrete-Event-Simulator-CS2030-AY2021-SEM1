@@ -34,7 +34,7 @@ public class Point {
      * @param p takes in the input point
      * @return angle between current to input point in radians
      */
-    public double pointAngle(Point p) {
+    public double angleTo(Point p) {
         double coordinateX = p.getX() - getX();
         double coordinateY = p.getY() - getY();
         return Math.atan2(coordinateY, coordinateX);
@@ -44,7 +44,7 @@ public class Point {
     public String toString() {
         String coordinateX = String.format("%.3f", getX());
         String coordinateY = String.format("%.3f", getY());
-        return "(" + coordinateX + ", " + coordinateY + ")";
+        return "point (" + coordinateX + ", " + coordinateY + ")";
     }
 
 }
