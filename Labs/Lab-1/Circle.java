@@ -8,22 +8,14 @@ public class Circle {
         this.radius = radius;
     }
 
-    private Point getCentre() {
-        return this.centre;
-    }
-
-    private double getRadius() {
-        return this.radius;
-    }
-
-    private Circle getCircle(Point centre, double radius) {
-        return new Circle(centre, radius);
+    public boolean contains(Point p) {
+        return p.distanceTo(this.centre) <= this.radius;
     }
 
     @Override
     public String toString() {
-        return String.format("circle of radius %.1f centered at ", getRadius()) +
-            getCentre().toString();
+        return String.format("circle of radius %.1f centered at ", this.radius) +
+            this.centre.toString();
     }
 
 }

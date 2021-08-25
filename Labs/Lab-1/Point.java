@@ -8,22 +8,14 @@ public class Point {
         this.y = y;
     }
 
-    private double getX() {
-        return this.x;
-    }
-
-    private double getY() {
-        return this.y;
-    }
-
     /**
      * Returns the Point inbetween the current point and the input point.
      * @param p takes in the input point
      * @return the midpoint as a Point instance
      */
     public Point midPoint(Point p) {
-        double coordinateX = (getX() + p.getX()) / 2;
-        double coordinateY = (getY() + p.getY()) / 2;
+        double coordinateX = (this.x + p.x) / 2;
+        double coordinateY = (this.y + p.y) / 2;
         Point midPoint = new Point(coordinateX, coordinateY);
         return midPoint;
     }
@@ -47,8 +39,8 @@ public class Point {
      * @return angle between current to input point in radians
      */
     public double angleTo(Point p) {
-        double coordinateX = p.getX() - getX();
-        double coordinateY = p.getY() - getY();
+        double coordinateX = p.x - this.x;
+        double coordinateY = p.y - this.y;
         return Math.atan2(coordinateY, coordinateX);
     }
 
@@ -67,9 +59,8 @@ public class Point {
 
     @Override
     public String toString() {
-        String coordinateX = String.format("%.3f", getX());
-        String coordinateY = String.format("%.3f", getY());
+        String coordinateX = String.format("%.3f", this.x);
+        String coordinateY = String.format("%.3f", this.y);
         return "point (" + coordinateX + ", " + coordinateY + ")";
     }
-
 }
