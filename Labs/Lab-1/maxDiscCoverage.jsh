@@ -1,11 +1,8 @@
-public static Circle createUnitCircle(Point p, Point q) {
+Circle createUnitCircle(Point p, Point q) {
     double unitCircleRadius = 1.0;
     Point midPoint = p.midPoint(q);
     double midDistanceToQ = midPoint.distanceTo(q);
     double distanceD = Math.sqrt(unitCircleRadius - Math.pow(midDistanceToQ, 2));
-    if (Double.isNaN(distanceD)) {
-         return null;
-    }
     double theta = p.angleTo(q) + Math.PI / 2;
 
     Point centre = midPoint.moveTo(theta, distanceD);
@@ -22,8 +19,8 @@ int findMaxDiscCoverage(Point[] points) {
             Circle unitCircle = createUnitCircle(p, q);
             int totalPointsInCircle = 0;
 
-            if (p.distanceTo(q) > 2 || p.distanceTo(q) == 0 || unitCircle == null) {
-                return null;
+            if (p.distanceTo(q) > 2 || p.distanceTo(q) == 0) {
+                continue;
             }
 
             // test each point against this unit circle
