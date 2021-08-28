@@ -1,12 +1,12 @@
 Circle createUnitCircle(Point p, Point q) {
-    double unitCircleRadius = 1.0;
+    double UNIT_CIRCLE_RADIUS = 1.0;
     Point midPoint = p.midPoint(q);
     double midDistanceToQ = midPoint.distanceTo(q);
-    double distanceD = Math.sqrt(unitCircleRadius - Math.pow(midDistanceToQ, 2));
+    double distanceD = Math.sqrt(UNIT_CIRCLE_RADIUS - Math.pow(midDistanceToQ, 2));
     double theta = p.angleTo(q) + Math.PI / 2;
 
     Point centre = midPoint.moveTo(theta, distanceD);
-    return new Circle(centre, unitCircleRadius);
+    return new Circle(centre, UNIT_CIRCLE_RADIUS);
 }
 
 int findMaxDiscCoverage(Point[] points) {
