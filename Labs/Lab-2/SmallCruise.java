@@ -1,9 +1,10 @@
 class SmallCruise extends Cruise {
 
-    private final int TIME_TO_LOAD = 30;
-    private final int MAX_LOADER_AMT = 1;
+    private static final int SERVE_TIME = 30;
+    private static final int LOADER_AMOUNT = 1;
 
-    public SmallCruise(String name, int time) {
-        super(name, time, 1 , 30);
+    public SmallCruise(String id, int arrivalTime) {
+        super(id, arrivalTime, LOADER_AMOUNT, SERVE_TIME);
     }
+
 }
