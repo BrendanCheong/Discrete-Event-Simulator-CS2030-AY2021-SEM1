@@ -1,5 +1,5 @@
 public void serveCruises(Cruise[] cruises) {
-    Loader[] loaders = new Loader[30];
+    Loader[] loaders = new Loader[35];
 
     for (Cruise cruise : cruises) {
         int currentLoadersRequired = cruise.getNumOfLoadersRequired();
