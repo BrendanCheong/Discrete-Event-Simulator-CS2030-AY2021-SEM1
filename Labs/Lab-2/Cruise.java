@@ -15,11 +15,11 @@ class Cruise {
     }
 
     public int getArrivalTime() {
-       int minutes = (this.arrivalTime % HUNDREDTH_PLACE);
-       int hours = (this.arrivalTime / HUNDREDTH_PLACE);
-       return (hours * NUM_OF_MINS_IN_HOUR) + minutes;
+        int minutes = (this.arrivalTime % HUNDREDTH_PLACE);
+        int hours = (this.arrivalTime / HUNDREDTH_PLACE);
+        return (hours * NUM_OF_MINS_IN_HOUR) + minutes;
     }
-    
+
     public int getNumOfLoadersRequired() {
         return this.numOfLoaders;
     }

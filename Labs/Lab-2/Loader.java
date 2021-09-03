@@ -10,7 +10,11 @@ class Loader {
 
     public boolean canServe(Cruise cruise) {
         // if no cruise being served at the moment, then return true
-        return this.cruise.getServiceCompletionTime() <= cruise.getArrivalTime();
+        if (this.cruise.getServiceCompletionTime() <= cruise.getArrivalTime()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Loader serve(Cruise cruise) {
