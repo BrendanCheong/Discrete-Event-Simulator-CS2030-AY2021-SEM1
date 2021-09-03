@@ -6,11 +6,11 @@
 public boolean checkThirdLoader(int index) {
     int THIRD_INDEX = 3;
     int OFFSET = 1;
-    return ((index + OFFSET) % 3) == 0;
+    return ((index + OFFSET) % THIRD_INDEX) == 0;
   }
 
 public void serveCruises(Cruise[] cruises) {
-    Loader[] loaders = new Loader[35];
+    Loader[] loaders = new Loader[40];
 
     for (Cruise cruise : cruises) {
         int currentLoadersRequired = cruise.getNumOfLoadersRequired();

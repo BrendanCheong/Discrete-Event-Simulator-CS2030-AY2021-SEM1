@@ -1,7 +1,7 @@
 class Loader {
 
     private final int identifier;
-    protected final Cruise cruise;
+    private final Cruise cruise;
 
     public Loader(int identifier, Cruise cruise) {
         this.identifier = identifier;
@@ -44,6 +44,10 @@ class Loader {
 
     protected int getNextAvailableTime() {
         return this.cruise.getServiceCompletionTime();
+    }
+
+    protected Cruise getCruise() {
+        return this.cruise;
     }
 
     @Override

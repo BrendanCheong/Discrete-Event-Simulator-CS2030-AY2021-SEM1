@@ -28,7 +28,7 @@ class RecycledLoader extends Loader {
         return "Recycled Loader " +
              getIdentifier() +
             " serving " +
-            this.cruise.toString();
+            getCruise().toString();
     }
 
 }
