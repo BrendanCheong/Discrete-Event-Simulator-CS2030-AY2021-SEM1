@@ -1,3 +1,5 @@
+import static java.util.Objects.isNull;
+
 public void serveCruises(Cruise[] cruises) {
     Loader[] loaders = new Loader[35];
 
@@ -7,7 +9,7 @@ public void serveCruises(Cruise[] cruises) {
         for (int i = 0 ; i < loaders.length; i++) {
             if (currentLoadersRequired <= 0) {
                 break;
-            } else if (loaders[i] == null) {
+            } else if (isNull(loaders[i])) {
                 loaders[i] = new Loader(i + 1, cruise);
                 System.out.println(loaders[i].toString());
                 currentLoadersRequired -= 1;
