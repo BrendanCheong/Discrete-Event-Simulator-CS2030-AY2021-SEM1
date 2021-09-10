@@ -38,7 +38,7 @@ abstract class Rubik implements Cloneable {
 
     @Override
     public String toString() {
-        String result = "";
+        String result = "\n";
         final String bufferDots = "......";
         final int gridRows = this.grid[0][0].length;
         final int gridColumns = this.grid[0].length;

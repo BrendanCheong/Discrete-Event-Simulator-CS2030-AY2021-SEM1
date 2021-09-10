@@ -59,7 +59,7 @@ class Face implements Cloneable {
 
     @Override
     public String toString() {
-        String result = "";
+        String result = "\n";
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid[0].length; j++) {
                 if (j == this.grid[0].length - 1) {
