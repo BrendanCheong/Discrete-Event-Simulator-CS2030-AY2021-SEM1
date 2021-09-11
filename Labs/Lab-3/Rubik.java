@@ -33,6 +33,10 @@ abstract class Rubik implements Cloneable {
 
     protected abstract Rubik frontView();
 
+    protected final int[][][] getGrid() {
+        return this.grid;
+    }
+
     public abstract Rubik clone();
 
 
