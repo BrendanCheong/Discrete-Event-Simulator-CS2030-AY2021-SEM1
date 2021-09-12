@@ -1,5 +1,3 @@
-import static java.util.Objects.isNull;
-
 /**
  * Checks if the current indexed Loader in loader array is the third loader.
  * @param index takes in current index to be checked in the array
@@ -20,7 +18,7 @@ public void serveCruises(Cruise[] cruises) {
         for (int i = 0 ; i < loaders.length; i++) {
             if (currentLoadersRequired <= 0) {
                 break;
-            } else if (isNull(loaders[i])) {
+            } else if (loaders[i] instanceof Object == false) {
                 if (checkThirdLoader(i)) {
                     loaders[i] = new RecycledLoader(i + 1, cruise);
                 } else {
