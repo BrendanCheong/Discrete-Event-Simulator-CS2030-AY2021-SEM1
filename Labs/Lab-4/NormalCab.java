@@ -1,13 +1,16 @@
 public class NormalCab extends Cab {
 
+    private final RideService[] services = {
+        new JustRide(), new TakeACab()
+    };
+
     public NormalCab(String licensePlate, int waitingTime) {
         super(licensePlate, waitingTime);
     }
 
     @Override
-    public void addServices() {
-        super.services.add(new JustRide());
-        super.services.add(new TakeACab());
+    public RideService[] getServices() {
+        return this.services;
     }
 
     @Override
