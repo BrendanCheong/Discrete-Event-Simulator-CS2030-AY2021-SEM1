@@ -24,6 +24,10 @@ public class Request {
         return this.distance;
     }
 
+    public int getPax() {
+        return this.pax;
+    }
+
     @Override
     public String toString() {
         return String.format("%dkm for %dpax @ %dhrs",

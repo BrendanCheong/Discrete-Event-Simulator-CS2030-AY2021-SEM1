@@ -15,7 +15,7 @@ abstract class RideService {
      * @param distance the distance of request to be travelled
      * @return the calculated cost which is fare * distance
      * */
-    protected final int getFarePerDistance(int distance) {
+    public int getFarePerDistance(int distance) {
         return this.fare * distance;
     }
 
@@ -25,7 +25,7 @@ abstract class RideService {
      * @param extraCharge the extra cost added
      * @return the calculated cost with extra charge considered
      * */
-    protected final int getFarePerDistanceExtra(int distance, int extraCharge) {
+    public int getFarePerDistanceExtra(int distance, int extraCharge) {
         return extraCharge + (this.fare * distance);
     }
 

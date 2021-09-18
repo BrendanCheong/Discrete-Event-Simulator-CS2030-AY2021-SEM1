@@ -1,5 +1,6 @@
-public class NormalCab extends Cab {
+public class NormalCab extends Driver {
 
+    // Store all possible service as an Array
     private final RideService[] services = {
         new JustRide(), new TakeACab()
     };
