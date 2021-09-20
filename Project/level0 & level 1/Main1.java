@@ -1,8 +1,7 @@
 import java.util.Scanner;
-import java.util.List;
 import java.util.ArrayList;
 
-class Main {
+class Main1 {
     /**
      * Main method to create a Discrete Event Simulator.
      * <p>Will first take in number of servers, then timing of customers</p>
@@ -11,7 +10,7 @@ class Main {
      * */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        List<Double> arrivalTimes = new ArrayList<Double>();
+        ArrayList<Double> arrivalTimes = new ArrayList<Double>();
 
         // take in the number of servers
         int serverAmount = sc.nextInt();

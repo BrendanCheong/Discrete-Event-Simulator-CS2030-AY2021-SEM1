@@ -1,16 +1,24 @@
-public class Customer implements Comparable<Customer> {
+public class Customer {
 
-    private final static int DEFAULT_ID = 1;
-    public final int customerID;
+    private final int customerID;
+    private final double arrivalTime;
 
-    private enum state {
-        ARRIVES, SERVED, WAITS, DONE, LEAVE
-    }
-    private final state customerStatus;
-
-    public Customer(int customerID, state customerStatus) {
+    public Customer(int customerID, double arrivalTime) {
         this.customerID = customerID;
-        this.customerStatus = customerStatus;
+        this.arrivalTime = arrivalTime;
+    }
+
+    public int getCustomerID() {
+        return this.customerID;
+    }
+
+    public double getArrivalTime() {
+        return this.arrivalTime;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%.3f %d ", getArrivalTime(), getCustomerID());
     }
 
 }
