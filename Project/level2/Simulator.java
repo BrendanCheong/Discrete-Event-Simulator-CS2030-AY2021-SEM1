@@ -33,9 +33,6 @@ public class Simulator {
         List<Customer> customers = new ArrayList<>();
 
         // Variables to update statistics
-        double waitingTime = 0;
-        int numOfLeft = 0;
-        int numOfServed = 0;
 
         // array of servers based on the int from the Scanner
         for (int id = 0; id < numServers; ++id) {
@@ -69,7 +66,6 @@ public class Simulator {
                     break;
                 case ("waits"):
                     eventQueue.add(nextEvent);
-                    waitingTime = waitingTime + nextEvent.getTime() - nextEvent.getCustomer().getArrivalTime();
                     totalEvents.add(new WaitEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
                             nextEvent.getTime()));
                     break;
@@ -79,18 +75,18 @@ public class Simulator {
                             nextEvent.getTime()));
                     break;
                 case ("done"):
-                    numOfServed += 1;
                     totalEvents.add(new DoneEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
                             nextEvent.getTime()));
                     break;
                 default:
-                    numOfLeft += 1;
+                    totalEvents.add(new LeaveEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
+                            nextEvent.getTime()));
             }
         }
 
         // finally, print the statistics
-        double averageWaitingTime = waitingTime / numOfServed;
-        System.out.println('[' + String.format("%.3f", averageWaitingTime) + ' ' + numOfServed + ' ' + numOfLeft + ']');
+        Statistics stats = new Statistics(totalEvents);
+        System.out.println(String.format("[%.3f %d %d]", stats.calculateAverageWaitingTime(),
+                stats.calculateNumberOfServed(), stats.calculateNumberOfLeft()));
     }
-
 }

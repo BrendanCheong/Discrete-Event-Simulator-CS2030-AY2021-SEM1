@@ -16,7 +16,6 @@ public class Statistics {
 
             }
         }
-        System.out.println("\n");
         return totalWaitingTime / this.calculateNumberOfServed();
     }
 
