@@ -73,6 +73,10 @@ public abstract class Event {
         return new Server(69, false, true, 420.0);
     }
 
+    public Server getServer() {
+        return new Server(69, false, true, 420.0);
+    }
+
     public abstract String getName();
 
     public Event mutate() {

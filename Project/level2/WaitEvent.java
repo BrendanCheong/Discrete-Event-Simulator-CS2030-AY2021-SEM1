@@ -40,6 +40,11 @@ public class WaitEvent extends Event {
         return EVENT_NAME;
     }
 
+    @Override
+    public Server getServer() {
+        return this.server;
+    }
+
     /**
      * Method to return string of WaitEvent when instantiated.
      * 

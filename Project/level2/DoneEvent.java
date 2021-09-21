@@ -46,6 +46,11 @@ public class DoneEvent extends Event {
         return EVENT_NAME;
     }
 
+    @Override
+    public Server getServer() {
+        return this.server;
+    }
+
     /**
      * Method to get DoneEvent string when it is instantiated.
      * 

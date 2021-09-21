@@ -28,6 +28,7 @@ public class Simulator {
     public void simulate() {
         // will be adding events to this events priority queue
         PriorityQueue<Event> eventQueue = new PriorityQueue<>(new EventComparator());
+        List<Event> totalEvents = new ArrayList<>(1000);
         List<Server> servers = new ArrayList<>();
         List<Customer> customers = new ArrayList<>();
 
@@ -64,16 +65,23 @@ public class Simulator {
             switch (firstEvent.getName()) {
                 case ("arrives"):
                     eventQueue.add(nextEvent);
+                    totalEvents.add(new ArriveEvent(nextEvent.getCustomer(), servers, nextEvent.getTime()));
                     break;
                 case ("waits"):
                     eventQueue.add(nextEvent);
                     waitingTime = waitingTime + nextEvent.getTime() - nextEvent.getCustomer().getArrivalTime();
+                    totalEvents.add(new WaitEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
+                            nextEvent.getTime()));
                     break;
                 case ("serves"):
                     eventQueue.add(nextEvent);
+                    totalEvents.add(new ServeEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
+                            nextEvent.getTime()));
                     break;
                 case ("done"):
                     numOfServed += 1;
+                    totalEvents.add(new DoneEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
+                            nextEvent.getTime()));
                     break;
                 default:
                     numOfLeft += 1;

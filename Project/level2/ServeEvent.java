@@ -41,6 +41,11 @@ class ServeEvent extends Event {
     }
 
     @Override
+    public Server getServer() {
+        return this.server;
+    }
+
+    @Override
     public String toString() {
         return String.format("%.3f %d %s by %s", this.getTime(), this.getCustomerId(), this.getName(),
                 this.server.toString());
