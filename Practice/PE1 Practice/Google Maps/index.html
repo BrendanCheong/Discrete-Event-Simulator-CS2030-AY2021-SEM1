@@ -1,0 +1,205 @@
+<h3>CS2030 Mid-Semester Practical Assessment</h3>
+<h4>Problem Description</h4>
+<p>You are given a list of routes, each comprising two cities and the distance  (in km) between them. An example is given below:</p>
+<pre>clementi west_coast 2.4
+clementi jurong 3.2
+jurong west_coast 5.2
+jurong clementi 3.2
+jurong holland_village 6.3
+clementi clementi 0.0
+</pre>
+<p>Your task is to process the list and represent the problem using an object-oriented model so as to generate the following information:</p>
+<pre>Number of cities: 4
+Number of routes: 4
+
+List of cities:
+clementi
+west_coast
+jurong
+holland_village
+
+List of routes:
+clementi and west_coast is 2.4km apart
+clementi and jurong is 3.2km apart
+jurong and west_coast is 5.2km apart
+jurong and holland_village is 6.3km apart
+
+Most accessible cities:
+jurong
+
+Longest routes:
+jurong and holland_village is 6.3km apart
+</pre>
+<p>Note that entries which are duplicates (i.e. the two cities appearing in a previous route) or having both cities the same are discarded. In addition, the accessibility of a city is the number of routes in which it appears.   There could be multiple most-accessible cities and/or longest routes.</p>
+<p>Take note of the following assumptions:</p>
+<ul>
+<li>The number of lines in the input is no more than 100; </li>
+<li>Each city is a complete word with no spaces </li>
+<li>The distance (km) is a non-negative number accurate to one decimal place. </li>
+<li>Output of a <tt>double</tt> value, say <tt>d</tt>, is to be formatted with <tt>String.format("%.1f", d)</tt>; <!--
+<li>Inconsistencies between sample output and actual output involving <tt>-0.000</tt> and <tt>0.000</tt> can be ignored. --> </li>
+</ul>
+<p>This task is divided into several levels. Read through all the levels  to see how the different levels are related. <strong>Find a suitable level to start off.</strong></p>
+<p>Just remember to:</p>
+<ul>
+<li>the <tt>Main</tt> class with the <tt>main</tt> method that handles input has been provided for level 1; you should extend this for other levels </li>
+<li>check for output format correctness using the <tt>diff</tt> utility (see specific level for usage details).  Note that only <strong>one</strong> test case is provided for this; </li>
+<li>check for styling errors by invoking <tt>checkstyle</tt>. For example, to check styling for all java files
+<pre>$ checkstyle *.java
+</pre>
+</li>
+<li>save a copy of all source files into the appropriate level directory (see specific level for usage details). </li>
+</ul>
+<!-- <b> 
+<ul>
+<li>Deadline: Submit your work to CodeCrunch by Thursday, 15 September, 23:59:59. 
+</ul>
+</b> -->   
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody>
+<tr>
+<td>
+<h4>Level 1</h4>
+<p>The <tt>Main</tt> class has been provided to you.</p>
+<pre>import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (sc.hasNext()) {
+            City city1 = new City(sc.next());
+            City city2 = new City(sc.next());
+            Route route = new Route(city1, city2, sc.nextDouble()); 
+                
+            System.out.println(route);
+        }
+    }
+}
+
+</pre>
+<p>Without modifying the <tt>Main</tt> class, define the <tt>City</tt> and <tt>Route</tt> classes so as to give the desired output as shown in the following sample run of the program.  User input is <span style="text-decoration: underline;">underlined</span>.</p>
+<p>Note that it does not matter whether the output is interspersed between the input or otherwise. It is more important that the ordering of the output is consistent. <!-- Ensure that the last line of output is followed by a newline character. --></p>
+<table border="1">
+<tbody>
+<tr>
+<td><tt> <span style="text-decoration: underline;">clementi west_coast 2.4</span><br> <span style="text-decoration: underline;">clementi jurong 3.2</span><br> <span style="text-decoration: underline;">jurong west_coast 5.2</span><br> <span style="text-decoration: underline;">jurong clementi 3.2</span><br> <span style="text-decoration: underline;">jurong holland_village 6.3</span><br> <span style="text-decoration: underline;">clementi clementi 0.0</span><br> clementi and west_coast is 2.4km apart<br> clementi and jurong is 3.2km apart<br> jurong and west_coast is 5.2km apart<br> jurong and clementi is 3.2km apart<br> jurong and holland_village is 6.3km apart<br> clementi and clementi is 0.0km apart<br> </tt></td>
+</tr>
+</tbody>
+</table>
+<p>Click <a href="task_view.php?tid=4058" target="_blank">here</a> to submit to CodeCrunch.</p>
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre>$ java Main &lt; test.in | diff - test1.out
+</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands</p>
+<pre>$ mkdir city1
+$ cp *.java city1
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody>
+<tr>
+<td>
+<h4>Level 2</h4>
+<p>You should now discard repeated entries, or entries where both cities are the same.</p>
+<p>The following is a sample run of the program.  User input is <span style="text-decoration: underline;">underlined</span>.   <!-- Ensure that the last line of output is followed by a newline character. --></p>
+<table border="1">
+<tbody>
+<tr>
+<td><tt> <span style="text-decoration: underline;">clementi west_coast 2.4</span><br> <span style="text-decoration: underline;">clementi jurong 3.2</span><br> <span style="text-decoration: underline;">jurong west_coast 5.2</span><br> <span style="text-decoration: underline;">jurong clementi 3.2</span><br> <span style="text-decoration: underline;">jurong holland_village 6.3</span><br> <span style="text-decoration: underline;">clementi clementi 0.0</span><br> clementi and west_coast is 2.4km apart<br> clementi and jurong is 3.2km apart<br> jurong and west_coast is 5.2km apart<br> jurong and holland_village is 6.3km apart<br> </tt></td>
+</tr>
+</tbody>
+</table>
+<p>Click <a href="task_view.php?tid=4059" target="_blank">here</a> to submit to CodeCrunch.</p>
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre>$ java Main &lt; test.in | diff - test2.out
+</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands</p>
+<pre>$ mkdir city2
+$ cp *.java city2
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody>
+<tr>
+<td>
+<h4>Level 3</h4>
+<p>Keep track of the number of unique cities and routes, and list them.</p>
+<p>The following is a sample run of the program.  User input is <span style="text-decoration: underline;">underlined</span>.   <!-- Ensure that the last line of output is followed by a newline character. --></p>
+<table border="1">
+<tbody>
+<tr>
+<td><tt> <span style="text-decoration: underline;">clementi west_coast 2.4</span><br> <span style="text-decoration: underline;">clementi jurong 3.2</span><br> <span style="text-decoration: underline;">jurong west_coast 5.2</span><br> <span style="text-decoration: underline;">jurong clementi 3.2</span><br> <span style="text-decoration: underline;">jurong holland_village 6.3</span><br> <span style="text-decoration: underline;">clementi clementi 0.0</span><br> Number of cities: 4<br> Number of routes: 4<br> <br> List of cities:<br> clementi<br> west_coast<br> jurong<br> holland_village<br> <br> List of routes:<br> clementi and west_coast is 2.4km apart<br> clementi and jurong is 3.2km apart<br> jurong and west_coast is 5.2km apart<br> jurong and holland_village is 6.3km apart<br> </tt></td>
+</tr>
+</tbody>
+</table>
+<p>Click <a href="task_view.php?tid=4060" target="_blank">here</a> to submit to CodeCrunch.</p>
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre>$ java Main &lt; test.in | diff - test3.out
+</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands</p>
+<pre>$ mkdir city3
+$ cp *.java city3
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody>
+<tr>
+<td>
+<h4>Level 4</h4>
+Find the most accessible city and the longest route.  You may assume there is only one most accessible city and one longest route.
+<p>The following is a sample run of the program.  User input is <span style="text-decoration: underline;">underlined</span>.   <!-- Ensure that the last line of output is followed by a newline character. --></p>
+<table border="1">
+<tbody>
+<tr>
+<td><tt> <span style="text-decoration: underline;">clementi west_coast 2.4</span><br> <span style="text-decoration: underline;">clementi jurong 3.2</span><br> <span style="text-decoration: underline;">jurong west_coast 5.2</span><br> <span style="text-decoration: underline;">jurong clementi 3.2</span><br> <span style="text-decoration: underline;">jurong holland_village 6.3</span><br> <span style="text-decoration: underline;">clementi clementi 0.0</span><br> Number of cities: 4<br> Number of routes: 4<br> <br> List of cities:<br> clementi<br> west_coast<br> jurong<br> holland_village<br> <br> List of routes:<br> clementi and west_coast is 2.4km apart<br> clementi and jurong is 3.2km apart<br> jurong and west_coast is 5.2km apart<br> jurong and holland_village is 6.3km apart<br> <br> Most accessible city: jurong<br> Longest route: jurong and holland_village is 6.3km apart<br> </tt></td>
+</tr>
+</tbody>
+</table>
+<p>Click <a href="task_view.php?tid=4061" target="_blank">here</a> to submit to CodeCrunch.</p>
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre>$ java Main &lt; test.in | diff - test4.out
+</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands</p>
+<pre>$ mkdir city4
+$ cp *.java city4
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody>
+<tr>
+<td>
+<h4>Level 5</h4>
+Account for multiple cities which have the same maximum accessibility, as well as multiple longest routes. List these maximum-accessibility cities in ascending order of their name, and the multiple longest routes in ascending order of the first city's name (and if there is a tie, in ascending order of the second city's name).
+<p>The following is a sample run of the program.  User input is <span style="text-decoration: underline;">underlined</span>.   <!-- Ensure that the last line of output is followed by a newline character. --></p>
+<table border="1">
+<tbody>
+<tr>
+<td><tt> <span style="text-decoration: underline;">jurong west_coast 5.2</span><br> <span style="text-decoration: underline;">clementi west_coast 2.4</span><br> <span style="text-decoration: underline;">clementi jurong 5.2</span><br> <span style="text-decoration: underline;">jurong clementi 3.2</span><br> <span style="text-decoration: underline;">clementi clementi 0.0</span><br> Number of cities: 3<br> Number of routes: 3<br> <br> List of cities:<br> jurong<br> west_coast<br> clementi<br> <br> List of routes:<br> jurong and west_coast is 5.2km apart<br> clementi and west_coast is 2.4km apart<br> clementi and jurong is 5.2km apart<br> <br> Most accessible cities (sorted):<br> clementi<br> jurong<br> west_coast<br> <br> Longest routes (sorted):<br> clementi and jurong is 5.2km apart<br> jurong and west_coast is 5.2km apart<br> </tt></td>
+</tr>
+</tbody>
+</table>
+<p>Click <a href="task_view.php?tid=4062" target="_blank">here</a> to submit to CodeCrunch.</p>
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre>$ java Main &lt; test.in | diff - test5.out
+</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands</p>
+<pre>$ mkdir city5
+$ cp *.java city5
+</pre>
+</td>
+</tr>
+</tbody>
+</table>

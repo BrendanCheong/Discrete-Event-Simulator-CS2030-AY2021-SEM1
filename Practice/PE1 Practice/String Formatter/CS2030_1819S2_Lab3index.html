@@ -1,0 +1,315 @@
+<h3>Text Formatters</h3>
+
+<p><b>Topic Coverage</b>
+<ul>
+<li>Uses of Interfaces</li>
+<li>Comparable Interface</li>
+<li>PriorityQueue and Natural Ordering</li>
+</ul>
+
+<h3>Problem Description</h3>
+
+<p>
+  Interfaces are a powerful tool that can be used to increase the maintainability of your codebase. In this lab, we will explore some different uses of interfaces and work with a commonly used interface, Comparable.
+</p>
+
+<p>
+  You are implementing a text editor. This text editor takes input and formats it according to the rules of a specified text formatter.
+</p>
+
+<p>
+  A number of different formats are specified below. Given an input string "I love CS2030", each formatter will output the following:
+</p>
+
+<ul>
+  <li>Snake Case: "i_love_cs2030"</li>
+  <li>Kebab Case: "i-love-cs2030"</li>
+  <li>Pascal Case: "ILoveCs2030"</li>
+  <li>Mixed Format: "i_love_cs2030", and this is derived from the following rules:</li>
+  <ol>
+    <li>Take the first character of the input string, denoted by c. Find r = c % 3, where c is interpreted as the ASCII value of the character.</li>
+    <li>If r = 0, create a formatter s using the Snake Case format.</li>
+    <li>If r = 1, create a formatter s using the Kebab Case format. (The above string would do this)</li>
+    <li>If r = 2, create a formatter s using the Pascal Case format.</li>
+    <li>Additionally, create a Snake Case formatter, t, for the string "I Love CS2030".</li>
+    <li>If s &gt; t, use the output of s. Otherwise, use the output of t.</li>
+  </ol>
+</ul>
+
+<h3>Task</h3>
+
+<p>
+  Write a program that reads some input strings, where each line is a string to format.
+</p>
+
+<p>The program will output all the formatted strings in the order defined in each level.</p>
+
+<p>The following assumptions can be made about the input:</p>
+<ul>
+  <li>They will only contain alphanumeric characters and spaces.</li>
+  <li>They will not start or end with a space.</li>
+  <li>There will not be 2 spaces in a row.</li>
+</ul>
+
+<p>This task is divided into four levels.</p>
+
+<p><table border=1 cellpadding=10>
+
+<tr><td><h4>Level 1</h4>
+
+<p>
+  <big><strong>Create the Text Editor and the Snake Case Formatter.</strong></big>
+</p>
+
+<p>Create the interface TextFormatter with the following code:</p>
+<p><pre>
+interface TextFormatter {
+  // Return a formatted string
+  public String format();
+}
+</pre></p>
+
+<p>Create a formatter that implements TextFormatter, such that calling <tt>format()</tt> returns a string formatted using Snake Case. The constructor of the formatter should take in the string to format. You may find it useful to use a <a href="https://docs.oracle.com/javase/9/docs/api/java/lang/StringBuilder.html">StringBuilder</a> to construct the formatted strings.</p>
+
+<p>Create a class, TextEditor, that has the following constructor:</p>
+
+<p><tt>public TextEditor(List&lt;TextFormatter&gt; formatter)</tt><br>
+i.e. the TextEditor is created with a list of provided TextFormatters.</p>
+
+<p>It should have the methods <tt>addString(String s)</tt>, that adds a string into the Text Editor,<br>
+  and a method <tt>printAll()</tt> to print all formatted strings.</p>
+
+<p>Write a program that reads in the input strings, passes them in order to TextEditor, and then calls <tt>printAll()</tt> at the end.</p>
+
+<p>The following is a sample run of the program.  
+User input is <u>underlined</u>.
+
+<p><table border=1 width=300>
+
+<tr><td><pre>
+$ java Main
+<u>I Love CS2030</u>
+i_love_cs2030
+</pre>
+
+<tr><td><pre>
+$ java Main
+<u>oneword
+two words
+Capitalized Text
+same same
+But Different
+correcT BaTTery stApl3 H0rSe</u>
+oneword
+two_words
+capitalized_text
+same_same
+but_different
+correct_battery_stapl3_h0rse
+</pre>
+
+</table>
+
+<p>Click <a href="">here</a> to submit to CodeCrunch.
+<p>Check the format correctness of the output by typing the following Unix command
+<pre>$ java Main &lt; test.in | diff - test1.out</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands
+<pre>$ jar cvf texteditor1.jar *.java<br>$ mkdir texteditor1<br>$ cp *.java texteditor1<br>$ cp texteditor1.jar texteditor1</pre>
+
+<tr><td><h4>Level 2</h4>
+
+<p>
+  <big><strong>Implement the Kebab Case Formatter and the Pascal Case Formatter</strong></big>
+</p>
+
+<p>Create the two formatters according to the rules defined above. Pass all three formatters to the TextEditor in the order <tt>[Snake Case, Kebab Case, Pascal Case]</tt>, such that when calling `printAll()`, each string is formatted using the 3 TextFormatters in order, and each string is printed in the order that it was inserted.</p>
+
+<p>The following is a sample run of the program.  
+User input is <u>underlined</u>.
+
+<p><table border=1 width=300>
+
+<tr><td><pre>
+$ java Main
+<u>I Love CS2030</u>
+i_love_cs2030
+i-love-cs2030
+ILoveCs2030
+</pre>
+
+<tr><td><pre>
+$ java Main
+<u>oneword
+two words
+Capitalized Text
+same same
+But Different
+correcT BaTTery stApl3 H0rSe</u>
+oneword
+oneword
+Oneword
+two_words
+two-words
+TwoWords
+capitalized_text
+capitalized-text
+CapitalizedText
+same_same
+same-same
+SameSame
+but_different
+but-different
+ButDifferent
+correct_battery_stapl3_h0rse
+correct-battery-stapl3-h0rse
+CorrectBatteryStapl3H0rse
+</pre>
+
+</table>
+
+<p>Click <a href="">here</a> to submit to CodeCrunch.
+<p>Check the format correctness of the output by typing the following Unix command
+<pre>$ java Main &lt; test.in | diff - test2.out</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands
+<pre>$ jar cvf texteditor2.jar *.java<br>$ mkdir texteditor2<br>$ cp *.java texteditor2<br>$ cp texteditor2.jar texteditor2</pre>
+
+<tr><td><h4>Level 3</h4>
+
+<p>
+  <big><strong>Sorting Formatters</strong></big>
+</p>
+
+<p>In Java, a <a href="https://docs.oracle.com/javase/9/docs/api/java/util/PriorityQueue.html">PriorityQueue</a> can be used to easily sort objects according to some rules of sorting.</p>
+
+<p>In a PriorityQueue, objects are sorted according to their "natural ordering", i.e. the order that objects would be in if no comparison condition, or <a href="https://docs.oracle.com/javase/9/docs/api/java/util/Comparator.html">Comparator</a>, is provided.</p>
+
+<p>We can do this by having the formatters implement the <a href="https://docs.oracle.com/javase/9/docs/api/java/lang/Comparable.html">Comparable</a> interface, specifically <tt>Comparable&lt;TextFormatter&gt;</tt>. The <tt>compareTo(T o)</tt> method compares the current object to another object. It returns a negative number if it comes before the other object, a positive number if it comes after the other object, and 0 if they are considered of the same ordering. The type <tt>T</tt> in the argument is a "generic type". In this case, since we are implementing <tt>Comparable&lt;TextFormatter&gt;</tt>, <tt>T</tt> should be <tt>TextFormatter</tt>. You will learn/have learnt more about it in the lectures.</p>
+
+<p>In your TextEditor, use a <tt>PriorityQueue&lt;TextFormatter&gt;</tt> to store the various TextFormatters. The comparison condition between TextFormatters should be as follows:</p>
+
+<ol>
+  <li>Generate the output of the text formatter.</li>
+  <li>Take the ASCII value of each character in the output and sum them up.</li>
+  <li>The formatter with a lower sum should come before the formatter with a higher sum.</li>
+</ol>
+
+<p><tt>printAll()</tt> should print all formatted strings according to the ordering defined above.</p>
+
+<p>(Note that we could also use a Comparator to sort output strings, but let's ignore that for the sake of learning.)</p>
+
+<p>The following is a sample run of the program.  
+User input is <u>underlined</u>.
+
+<p><table border=1 width=300>
+
+<tr><td><pre>
+$ java Main
+<u>I Love CS2030</u>
+ILoveCs2030
+i-love-cs2030
+i_love_cs2030
+</pre>
+
+<tr><td><pre>
+$ java Main
+<u>oneword
+two words
+Capitalized Text
+same same
+But Different
+correcT BaTTery stApl3 H0rSe</u>
+Oneword
+oneword
+oneword
+SameSame
+TwoWords
+same-same
+same_same
+two-words
+two_words
+ButDifferent
+but-different
+but_different
+CapitalizedText
+capitalized-text
+capitalized_text
+CorrectBatteryStapl3H0rse
+correct-battery-stapl3-h0rse
+correct_battery_stapl3_h0rse
+</pre>
+
+</table>
+
+<p>Click <a href="">here</a> to submit to CodeCrunch.
+<p>Check the format correctness of the output by typing the following Unix command
+<pre>$ java Main &lt; test.in | diff - test3.out</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands
+<pre>$ jar cvf texteditor3.jar *.java<br>$ mkdir texteditor3<br>$ cp *.java texteditor3<br>$ cp texteditor3.jar texteditor3</pre>
+
+
+<tr><td><h4>Level 4</h4>
+
+<p>
+  <big><strong>Implement the Mixed Formatter</strong></big>
+</p>
+
+<p>
+  Implement a Mixed formatter that formats strings according to the rules above. Add it to your TextEditor.
+</p>
+
+<p>Hint: You might need to implement a new interface that extends from others.</p>
+
+<p>The following is a sample run of the program.  
+User input is <u>underlined</u>.
+
+<p><table border=1 width=300>
+<tr><td><pre>
+$ java Main
+<u>I Love CS2030</u>
+ILoveCs2030
+i-love-cs2030
+i_love_cs2030
+i_love_cs2030
+</pre>
+<tr><td><pre>
+$ java Main
+<u>oneword
+two words
+Capitalized Text
+same same
+But Different
+correcT BaTTery stApl3 H0rSe</u>
+Oneword
+oneword
+oneword
+SameSame
+TwoWords
+same-same
+same_same
+two-words
+two_words
+i_love_cs2030
+i_love_cs2030
+i_love_cs2030
+ButDifferent
+but-different
+but_different
+but_different
+CapitalizedText
+capitalized-text
+capitalized-text
+capitalized_text
+CorrectBatteryStapl3H0rse
+correct-battery-stapl3-h0rse
+correct_battery_stapl3_h0rse
+correct_battery_stapl3_h0rse
+</pre>
+</table>
+
+<p>Click <a href="">here</a> to submit to CodeCrunch.
+<p>Check the format correctness of the output by typing the following Unix command
+<pre>$ java Main &lt; test.in | diff - test4.out</pre>
+<p>Make a copy of your Java programs to the level directory by typing the Unix commands
+<pre>$ jar cvf texteditor4.jar *.java<br>$ mkdir texteditor4<br>$ cp *.java texteditor4<br>$ cp texteditor4.jar texteditor4</pre>
+
+</table>
