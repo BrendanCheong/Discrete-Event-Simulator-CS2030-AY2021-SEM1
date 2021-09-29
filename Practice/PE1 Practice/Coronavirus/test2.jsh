@@ -1,3 +1,9 @@
+/open Virus.java
+/open AlphaCoronavirus.java
+/open SARS_CoV_2.java
+/open BetaCoronavirus.java
+/open Person.java
+
 Person illio = new Person("Illio");
 Person phillmont = new Person("phillmont")
 phillmont

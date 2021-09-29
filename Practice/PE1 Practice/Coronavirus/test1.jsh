@@ -1,3 +1,8 @@
+/open Virus.java
+/open AlphaCoronavirus.java
+/open SARS_CoV_2.java
+/open BetaCoronavirus.java
+
 new AlphaCoronavirus(0.5)
 new SARS_CoV_2(0.5)
 new BetaCoronavirus()
