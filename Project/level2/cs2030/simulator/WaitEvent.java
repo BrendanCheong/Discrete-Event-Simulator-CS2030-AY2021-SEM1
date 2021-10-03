@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * WaitEvent class to simulate the act of customer waiting.
  */
-class WaitEvent extends Event {
+public class WaitEvent extends Event {
 
     private static final String EVENT_NAME = "waits";
     private final Server server;

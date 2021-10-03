@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * DoneEvent to simulate the completion of service to a customer by a server.
  */
-class DoneEvent extends Event {
+public class DoneEvent extends Event {
 
     private static final String EVENT_NAME = "done";
     private final Server server;

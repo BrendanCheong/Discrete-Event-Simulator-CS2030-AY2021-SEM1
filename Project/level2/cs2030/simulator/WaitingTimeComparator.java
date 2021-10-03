@@ -2,7 +2,7 @@ package cs2030.simulator;
 
 import java.util.Comparator;
 
-class WaitingTimeComparator implements Comparator<Server> {
+public class WaitingTimeComparator implements Comparator<Server> {
     /**
      * Finds the next best server based on lowest server id.
      * Compares between 2 servers to find the lowest id

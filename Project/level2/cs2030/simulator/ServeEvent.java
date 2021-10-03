@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * ServeEvent class to simulate the start of service to a customer by a server.
  */
-class ServeEvent extends Event {
+public class ServeEvent extends Event {
 
     private static final String EVENT_NAME = "serves";
     private final Server server;

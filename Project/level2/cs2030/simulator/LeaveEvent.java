@@ -2,7 +2,7 @@ package cs2030.simulator;
 
 import java.util.List;
 
-class LeaveEvent extends Event {
+public class LeaveEvent extends Event {
 
     private static final String EVENT_NAME = "leaves";
     private final Server server;

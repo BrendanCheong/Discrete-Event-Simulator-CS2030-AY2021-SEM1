@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * NullEvent to signal the end of a customer getting served.
  */
-class NullEvent extends Event {
+public class NullEvent extends Event {
 
     private static final String EVENT_NAME = "Null";
 

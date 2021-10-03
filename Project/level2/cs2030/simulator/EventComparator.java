@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.HashMap;
 
-class EventComparator implements Comparator<Event> {
+public class EventComparator implements Comparator<Event> {
     /**
      * Compares 2 Events and decides which is smaller, equal or greater.
      * <p> First check earliest time </p>

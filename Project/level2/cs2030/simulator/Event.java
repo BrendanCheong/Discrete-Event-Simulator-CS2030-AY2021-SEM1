@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
  * Abstract Event class to enforce polymorphism. subclasses can create the next
  * event and update statistics.
  */
-abstract class Event {
+public abstract class Event {
 
     private static final double DEFAULT_SERVE_TIME = 1.0;
     private final Customer customer;

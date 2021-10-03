@@ -1,6 +1,6 @@
 package cs2030.simulator;
 
-class Server {
+public class Server {
     private final int id;
     private final boolean isAvailable;
     private final boolean hasWaitingCustomer;
