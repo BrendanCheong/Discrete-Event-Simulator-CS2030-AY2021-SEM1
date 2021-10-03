@@ -1,38 +1,40 @@
-public abstract class Question {
+public interface Question {
+
+    public Question answer();
     
-    private final String question;
-    private final int answer;
-    private final boolean isAnswer;
+    // private final String question;
+    // private final int answer;
+    // private final boolean isAnswer;
 
-    public Question(String question, int answer) {
-        this.question = question;
-        this.answer = answer;
-        this.isAnswer = false;
-    }
+    // public Question(String question, int answer) {
+    //     this.question = question;
+    //     this.answer = answer;
+    //     this.isAnswer = false;
+    // }
 
-    public Question(String question, int answer, boolean answerTrue) {
-        this.question = question;
-        this.answer = answer;
-        this.isAnswer = answerTrue;
-    }
+    // public Question(String question, int answer, boolean answerTrue) {
+    //     this.question = question;
+    //     this.answer = answer;
+    //     this.isAnswer = answerTrue;
+    // }
 
-    @Override
-    public String toString() {
-        if (this.isAnswer) {
-             return String.format("%s; Your answer: %d", this.question, this.answer);  
-        } else {
-             return String.format("%s; Your answer: %d", this.question, 0);
-        }
-    }
+    // @Override
+    // public String toString() {
+    //     if (this.isAnswer) {
+    //             return String.format("%s; Your answer: %d", this.question, this.answer);  
+    //     } else {
+    //             return String.format("%s; Your answer: %d", this.question, 0);
+    //     }
+    // }
 
-    protected final String getQuestion() {
-        return this.question;
-    }
+    // protected final String getQuestion() {
+    //     return this.question;
+    // }
 
-    protected final int getAnswer() {
-        return this.answer;
-    }
+    // protected final int getAnswer() {
+    //     return this.answer;
+    // }
 
-    public abstract Question answer(int option);
+    // public abstract Question answer(int option);
 
 }
