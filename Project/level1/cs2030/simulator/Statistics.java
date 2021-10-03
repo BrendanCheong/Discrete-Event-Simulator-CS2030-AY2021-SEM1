@@ -2,7 +2,7 @@ package cs2030.simulator;
 
 import java.util.List;
 
-public class Statistics {
+class Statistics {
 
     private final List<Event> allEvents;
     /**

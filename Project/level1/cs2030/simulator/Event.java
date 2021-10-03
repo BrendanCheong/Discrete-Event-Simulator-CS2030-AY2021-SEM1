@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
  * Abstract Event class to enforce polymorphism. subclasses can create the next
  * event and update statistics.
  */
-public abstract class Event {
+abstract class Event {
 
     private static final double DEFAULT_SERVE_TIME = 1.0;
     private final Customer customer;
@@ -17,7 +17,7 @@ public abstract class Event {
 
     /**
      * Event constructor for LeaveEvent.
-     * 
+     *
      * @param customer customer that the event is acting on
      * @param servers  list of servers
      * @param time     time that the event is created
@@ -48,10 +48,14 @@ public abstract class Event {
         return DEFAULT_SERVE_TIME;
     }
 
+    /**
+     * Abstraction to find the next available Server for arrive events to use.
+     * @return the next best server after arriving to the restaurant
+     * */
     protected final Server findNextAvailableServer() {
         // clone the servers first just in case of accidental mutation
         List<Server> servers = new ArrayList<Server>(this.servers);
-        PriorityQueue<Server> waitingServers = 
+        PriorityQueue<Server> waitingServers =
             new PriorityQueue<>(100, new WaitingTimeComparator());
 
         for (Server server : servers) {
@@ -59,8 +63,9 @@ public abstract class Event {
                 return server;
             }
         }
-        // not sure about this priorityQueue Algorithm but oh wells
-        // return the server with the shortest Id
+        // PriorityQueue algo will find the best server for the waiting customer
+        // which is in this case, the lowest Id server
+        // why its not the server with the next lowest serve time is anyone's guess man
 
         for (Server server : servers) {
             if (server.canTakeWaitEvent()) {
@@ -77,12 +82,11 @@ public abstract class Event {
     }
 
     public Server getServer() {
+        // helps other subclasses return a dummy server
         return new Server(69, false, true, 420.0);
     }
 
     public abstract String getName();
 
-    public Event mutate() {
-        return new NullEvent(this.getCustomer(), this.getServers(), this.getTime());
-    }
+    public abstract Event mutate();
 }

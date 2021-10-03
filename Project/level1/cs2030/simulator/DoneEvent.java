@@ -1,11 +1,11 @@
-
+package cs2030.simulator;
 
 import java.util.List;
 
 /**
  * DoneEvent to simulate the completion of service to a customer by a server.
  */
-public class DoneEvent extends Event {
+class DoneEvent extends Event {
 
     private static final String EVENT_NAME = "done";
     private final Server server;
@@ -17,9 +17,12 @@ public class DoneEvent extends Event {
 
     /**
      * Method to execute the DoneEvent.
-     * 
+     * <p> check if there is a waiting customer before creating a Null event where
+     * a waiting customer means we must update the time for statistics</p>
+     * <p> If not, just create a Null event with the same attributes </p>
      * @return the next event to be executed in this case, return dummy NullEvent
      */
+    @Override
     public Event mutate() {
         Customer customer = super.getCustomer();
         List<Server> newServers = super.getServers();
@@ -54,12 +57,12 @@ public class DoneEvent extends Event {
 
     /**
      * Method to get DoneEvent string when it is instantiated.
-     * 
+     *
      * @return string of the DoneEvent
      */
     public String toString() {
-        return String.format("%.3f %d %s serving by %s", 
-            this.getTime(), this.getCustomerId(), 
+        return String.format("%.3f %d %s serving by %s",
+            this.getTime(), this.getCustomerId(),
             this.getName(),this.server.toString());
     }
 }

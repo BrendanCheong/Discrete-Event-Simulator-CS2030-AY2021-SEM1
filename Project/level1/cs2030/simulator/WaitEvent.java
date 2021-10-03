@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * WaitEvent class to simulate the act of customer waiting.
  */
-public class WaitEvent extends Event {
+class WaitEvent extends Event {
 
     private static final String EVENT_NAME = "waits";
     private final Server server;
@@ -17,6 +17,10 @@ public class WaitEvent extends Event {
 
     /**
      * Method to execute the Event.
+     * <p>If server can take a wait event, create a serve event with a server who is serving
+     * a customer and can take a waiting customer</p>
+     * <p>If not, then the customer will leave restaurant T.T </p>
+     * @return Serve or Leave Event depending if server can serve or not
      */
     public Event mutate() {
         Customer customer = this.getCustomer();
@@ -48,11 +52,11 @@ public class WaitEvent extends Event {
 
     /**
      * Method to return string of WaitEvent when instantiated.
-     * 
+     *
      * @return returns string of WaitEvent
      */
     public String toString() {
-        return super.getCustomer().toString() + 
+        return super.getCustomer().toString() +
             String.format("%s at %s", EVENT_NAME, this.server.toString());
     }
 

@@ -1,3 +1,4 @@
+package cs2030.simulator;
 
 import java.util.PriorityQueue;
 import java.util.ArrayList;
@@ -12,18 +13,25 @@ public class Simulator {
 
     /**
      * Simulator to create the array of servers and add events.
-     * 
+     * <p> all parameters come from the Main class </p>
      * @param numServers number of servers based on the int
      * @param timeArray  array of the times (double)
-     */
+     **/
     public Simulator(int numServers, ArrayList<Double> timeArray) {
         this.numServers = numServers;
         this.timeArray = timeArray;
     }
 
     /**
-     * Start the simulation and output the events in order. Execute all the events
-     * then order it according to the comparator
+     * Start the simulation and output the events in order.
+     * <p>Execute all the events then order it according to the comparator</p>
+     * <p>the comparator will decide on the next event to print out, based
+     * on each event's ranking in the EventComparator class </p>
+     * <h2>About Statistics class</h2>
+     * <p>The statistics class abstracts away the need to calculate any stats
+     * about the simulation in the Simulator class, so that its extendable </p>
+     * <p>It takes in all events that has every happened (except Null) and calculates
+     * stats based on that </p>
      */
     public void simulate() {
         // will be adding events to this events priority queue
@@ -48,8 +56,8 @@ public class Simulator {
         }
 
         // Add each event into eventQueue
-        // poll - execute that event - add that event back into the queue
-        // still execute done but dont add back in
+        // poll - take out event and execute - then add that event back into the queue
+        // still execute done but dont add back in if not have duplicated done events
         // poll each event based on the comparator
 
         while (!eventQueue.isEmpty()) {
@@ -62,25 +70,25 @@ public class Simulator {
             switch (firstEvent.getName()) {
                 case ("arrives"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new ArriveEvent(nextEvent.getCustomer(), 
+                    totalEvents.add(new ArriveEvent(nextEvent.getCustomer(),
                         servers, nextEvent.getTime()));
                     break;
                 case ("waits"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new WaitEvent(nextEvent.getCustomer(), 
+                    totalEvents.add(new WaitEvent(nextEvent.getCustomer(),
                         servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 case ("serves"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new ServeEvent(nextEvent.getCustomer(), 
+                    totalEvents.add(new ServeEvent(nextEvent.getCustomer(),
                         servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 case ("done"):
-                    totalEvents.add(new DoneEvent(nextEvent.getCustomer(), 
+                    totalEvents.add(new DoneEvent(nextEvent.getCustomer(),
                         servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 default:
-                    totalEvents.add(new LeaveEvent(nextEvent.getCustomer(), 
+                    totalEvents.add(new LeaveEvent(nextEvent.getCustomer(),
                         servers, nextEvent.getServer(), nextEvent.getTime()));
             }
         }

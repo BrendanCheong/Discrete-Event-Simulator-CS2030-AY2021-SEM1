@@ -2,7 +2,10 @@ package cs2030.simulator;
 
 import java.util.List;
 
-public class ArriveEvent extends Event {
+/**
+ * Arrive Event to show that the customer has arrived to the restaurant.
+ * */
+class ArriveEvent extends Event {
 
     private static final String EVENT_NAME = "arrives";
 
@@ -12,7 +15,9 @@ public class ArriveEvent extends Event {
 
     /**
      * Method to execute the ArriveEvent.
-     * 
+     * <p> to decide which event to move on to, find out if you can take the
+     * wait event, or the serve event based on what the server says </p>
+     * <p> if not, then just leave </p>
      * @return the next event to be executed
      */
     public Event mutate() {

@@ -1,4 +1,4 @@
-// import cs2030.simulator.Simulator;
+import cs2030.simulator.Simulator;
 import java.util.Scanner;
 import java.util.ArrayList;
 
