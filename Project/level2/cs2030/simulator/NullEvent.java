@@ -1,3 +1,4 @@
+package cs2030.simulator;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ class NullEvent extends Event {
 
     /**
      * Creates a NullEvent.
-     * 
+     * I still need a Null Event for the Simulator to count the number of events
      * @param customer customer that the event is involving
      * @param time     time at which event is created
      * @param server   server that the NullEvent belongs to

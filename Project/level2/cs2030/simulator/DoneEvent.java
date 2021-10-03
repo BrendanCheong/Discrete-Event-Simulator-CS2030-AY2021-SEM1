@@ -1,12 +1,13 @@
+package cs2030.simulator;
 
 import java.util.List;
 
 /**
  * DoneEvent to simulate the completion of service to a customer by a server.
  */
-public class DoneEvent extends Event {
+class DoneEvent extends Event {
 
-    private final static String EVENT_NAME = "done";
+    private static final String EVENT_NAME = "done";
     private final Server server;
 
     public DoneEvent(Customer customer, List<Server> servers, Server server, double time) {
@@ -57,7 +58,8 @@ public class DoneEvent extends Event {
      * @return string of the DoneEvent
      */
     public String toString() {
-        return String.format("%.3f %d %s serving by %s", this.getTime(), this.getCustomerId(), this.getName(),
-                this.server.toString());
+        return String.format("%.3f %d %s serving by %s", 
+            this.getTime(), this.getCustomerId(), 
+            this.getName(),this.server.toString());
     }
 }

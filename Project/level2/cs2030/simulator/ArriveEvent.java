@@ -1,9 +1,10 @@
+package cs2030.simulator;
 
 import java.util.List;
 
-public class ArriveEvent extends Event {
+class ArriveEvent extends Event {
 
-    private final static String EVENT_NAME = "arrives";
+    private static final String EVENT_NAME = "arrives";
 
     public ArriveEvent(Customer customer, List<Server> servers, double time) {
         super(customer, servers, time);

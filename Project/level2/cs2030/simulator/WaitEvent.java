@@ -1,12 +1,13 @@
+package cs2030.simulator;
 
 import java.util.List;
 
 /**
  * WaitEvent class to simulate the act of customer waiting.
  */
-public class WaitEvent extends Event {
+class WaitEvent extends Event {
 
-    private final static String EVENT_NAME = "waits";
+    private static final String EVENT_NAME = "waits";
     private final Server server;
 
     public WaitEvent(Customer customer, List<Server> servers, Server server, double time) {
@@ -51,7 +52,8 @@ public class WaitEvent extends Event {
      * @return returns string of WaitEvent
      */
     public String toString() {
-        return super.getCustomer().toString() + String.format("%s at %s", EVENT_NAME, this.server.toString());
+        return super.getCustomer().toString() + 
+            String.format("%s at %s", EVENT_NAME, this.server.toString());
     }
 
 }

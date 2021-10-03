@@ -1,3 +1,4 @@
+package cs2030.simulator;
 
 import java.util.PriorityQueue;
 import java.util.ArrayList;
@@ -62,25 +63,26 @@ public class Simulator {
             switch (firstEvent.getName()) {
                 case ("arrives"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new ArriveEvent(nextEvent.getCustomer(), servers, nextEvent.getTime()));
+                    totalEvents.add(new ArriveEvent(nextEvent.getCustomer(), 
+                        servers, nextEvent.getTime()));
                     break;
                 case ("waits"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new WaitEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
-                            nextEvent.getTime()));
+                    totalEvents.add(new WaitEvent(nextEvent.getCustomer(), 
+                        servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 case ("serves"):
                     eventQueue.add(nextEvent);
-                    totalEvents.add(new ServeEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
-                            nextEvent.getTime()));
+                    totalEvents.add(new ServeEvent(nextEvent.getCustomer(), 
+                        servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 case ("done"):
-                    totalEvents.add(new DoneEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
-                            nextEvent.getTime()));
+                    totalEvents.add(new DoneEvent(nextEvent.getCustomer(), 
+                        servers, nextEvent.getServer(), nextEvent.getTime()));
                     break;
                 default:
-                    totalEvents.add(new LeaveEvent(nextEvent.getCustomer(), servers, nextEvent.getServer(),
-                            nextEvent.getTime()));
+                    totalEvents.add(new LeaveEvent(nextEvent.getCustomer(), 
+                        servers, nextEvent.getServer(), nextEvent.getTime()));
             }
         }
 

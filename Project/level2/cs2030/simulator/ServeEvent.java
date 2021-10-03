@@ -1,3 +1,4 @@
+package cs2030.simulator;
 
 import java.util.List;
 
@@ -6,7 +7,7 @@ import java.util.List;
  */
 class ServeEvent extends Event {
 
-    private final static String EVENT_NAME = "serves";
+    private static final String EVENT_NAME = "serves";
     private final Server server;
 
     /**
@@ -47,7 +48,7 @@ class ServeEvent extends Event {
 
     @Override
     public String toString() {
-        return String.format("%.3f %d %s by %s", this.getTime(), this.getCustomerId(), this.getName(),
-                this.server.toString());
+        return String.format("%.3f %d %s by %s", this.getTime(), this.getCustomerId(), 
+            this.getName(),this.server.toString());
     }
 }

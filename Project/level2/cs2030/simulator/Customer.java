@@ -1,5 +1,6 @@
+package cs2030.simulator;
 
-public class Customer {
+class Customer {
     private final int customerId;
     private final double arrivalTime;
 

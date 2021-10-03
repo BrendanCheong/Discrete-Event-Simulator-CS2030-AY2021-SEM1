@@ -1,3 +1,5 @@
+package cs2030.simulator;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -6,7 +8,7 @@ import java.util.PriorityQueue;
  * Abstract Event class to enforce polymorphism. subclasses can create the next
  * event and update statistics.
  */
-public abstract class Event {
+abstract class Event {
 
     private static final double DEFAULT_SERVE_TIME = 1.0;
     private final Customer customer;
@@ -49,7 +51,8 @@ public abstract class Event {
     protected final Server findNextAvailableServer() {
         // clone the servers first just in case of accidental mutation
         List<Server> servers = new ArrayList<Server>(this.servers);
-        PriorityQueue<Server> waitingServers = new PriorityQueue<>(100, new WaitingTimeComparator());
+        PriorityQueue<Server> waitingServers = 
+            new PriorityQueue<>(100, new WaitingTimeComparator());
 
         for (Server server : servers) {
             if (server.canTakeServeEvent()) {
@@ -68,7 +71,7 @@ public abstract class Event {
         if (waitingServers.size() > 0) {
             return waitingServers.peek();
         }
-        // Return a Server that is no available and cannot wait
+        // Return a Server that is not available and cannot wait
         // a dummy server
         return new Server(69, false, true, 420.0);
     }

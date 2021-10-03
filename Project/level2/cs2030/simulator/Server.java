@@ -1,5 +1,6 @@
+package cs2030.simulator;
 
-public class Server {
+class Server {
     private final int id;
     private final boolean isAvailable;
     private final boolean hasWaitingCustomer;
@@ -13,7 +14,8 @@ public class Server {
      * @param hasWaitingCustomer returns server has a waiting customer or not
      * @param nextAvailableTime  the time that the server will be available
      */
-    public Server(int id, boolean isAvailable, boolean hasWaitingCustomer, double nextAvailableTime) {
+    public Server(int id, boolean isAvailable, 
+        boolean hasWaitingCustomer, double nextAvailableTime) {
         this.id = id;
         this.isAvailable = isAvailable;
         this.hasWaitingCustomer = hasWaitingCustomer;

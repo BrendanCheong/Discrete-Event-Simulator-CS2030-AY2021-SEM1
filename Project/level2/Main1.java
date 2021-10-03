@@ -2,7 +2,7 @@ import cs2030.simulator.Simulator;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Main {
+public class Main1 {
     /**
      * Takes in number of servers and arrival times to simulate restaurant.
      * <p>simulates the entire restaurant with simulate method</p>
