@@ -1,0 +1,342 @@
+<div id="content_full">                         
+    <div class="content-header"><h3>CS2030 Lab #8 Mutable Infinite List</h3></div>
+    <div class="spacer"></div>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tbody><tr><td valign="top" style="width: 30%;">
+            <div class="meta_header">Tags &amp; Categories</div>
+            <div id="classifyList"></div>
+        </td>
+        <td valign="top" style="width: 40%;">
+            <div class="meta_header">Related Tutorials</div>
+            <div id="tutorialList"></div>
+        </td>
+        <td valign="top" style="width: 30%;">
+        </td>
+        </tr>
+    </tbody></table>
+    <div class="content-header">
+        <h3>Task Content
+                        </h3>
+    </div>                          
+    <div class="panel"><div class="task-content">
+    <h3 id="mutable-infinite-list">Mutable Infinite List</h3>
+<h4 id="problem-description">Problem Description</h4>
+<p>You have seen several versions of ordered list implementations in this class, which abstracted away the looping logic from you, allowing you to pass in lambda expressions to operate on the elements. <code>Stream</code> from the Java API is a mutable, infinite, list. In this lab, we are going to implement our own version of mutable, infinite, list, called <code>InfiniteList</code>.</p>
+<p>An <code>InfiniteList</code> is a generic list that can store elements of type <code>T</code> in order where duplicates are allowed. Unlike the previous lab, intermediate operations of <code>InfiniteList</code> should be lazily evaluated. Lazy evaluation allows us to create a list with a potentially infinite number of elements.</p>
+<h4 id="the-task">The Task</h4>
+<p>Just like <code>Stream</code> in Java, you will define <code>InfiniteList</code> as an interface, and you will implement each operation on an infinite list as a class that implements the <code>InfiniteList</code> interface. The <code>InfiniteList</code> interface has an abstract <code>get()</code> method, which is used to obtain the next element from the infinite list. The key to implementing an intermediate operation on the infinite list is to override the <code>get</code> method, including the logic of each method in its body.</p>
+<p>This task is divided into several levels. Read through all the levels to see how the different levels are related. You need to complete all levels.</p>
+<p>We have added some rules on CodeCrunch:</p>
+<ul>
+<li>You are not allowed to use raw types nor <code>@SuppressWarnings</code></li>
+<li>As <code>InfiniteList</code> is similar to Java's <code>Stream</code>, you are not allowed to use <code>Stream</code> class or anything from <code>java.util.stream</code> package</li>
+</ul>
+<p>You, are, however, allowed to use <code>get</code>, <code>isPresent</code>, and <code>isEmpty</code> from the class <code>Optional</code>.</p>
+
+<p>For this lab, you are also required to write <code>javadoc</code> comments and make sure you can generate the <code>javadoc</code> HTML files. You are not required to submit the <code>javadoc</code> HTML files, but they will be generated later based on your code. </p>
+<table style="width: 800px;" border="1" cellpadding="10">
+<tbody><tr><td>
+
+<h4 id="level-1-data-generation">Level 1: Data Generation</h4>
+<p>Create an <code>InfiniteList&lt;T&gt;</code> interface with a single abstract method <code>Optional&lt;T&gt; get()</code>. Then add two static members to start the stream pipeline via the following data sources:</p>
+<ul>
+<li><code>InfiniteList.generate(Supplier&lt;? extends T&gt; supplier)</code>, which generates an infinite stream of elements produced by the supplier.</li>
+<li><code>InfiniteList.iterate(T seed, UnaryOperator&lt;T&gt; f)</code>, which an infinite stream of elements seed, f(seed), f(f(seed), etc.</li>
+</ul>
+<p>To implement the methods above, create an abstract class <code>InfiniteListImpl&lt;T&gt;</code> that implements the <code>InfiniteList&lt;T&gt;</code> interface, but keep the <code>get</code> method abstract.</p>
+<p>The methods <code>generate</code> and <code>iterate</code> should then return an instance of a concrete subclass of <code>InfiniteListImpl</code>, overriding <code>get</code> with the appropriate logic to return the next element in the list. These concrete implementation of <code>InfiniteListImpl</code> might need to be mutable.</p>
+<p>Note that in this lab, we allow <code>get()</code> to be called directly for testing and to illustrate the internals of an infinite list. In practice, <code>get()</code> should be hidden from the clients.</p>
+<pre><b>jshell&gt; /open InfiniteList.java</b>
+<b>jshell&gt; /open InfiniteListImpl.java</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; dots = InfiniteList.generate(() -&gt; ".");</b>
+<b>jshell&gt; dots.get()</b>
+$.. ==&gt; Optional[.]
+<b>jshell&gt; dots.get()</b>
+$.. ==&gt; Optional[.]
+<b>jshell&gt; dots.get()</b>
+$.. ==&gt; Optional[.]
+<b>jshell&gt; InfiniteList&lt;Integer&gt; even = InfiniteList.iterate(0, i -&gt; i + 2);</b>
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional[0]
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional[2]
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional[4]
+<b>jshell&gt; Random rnd = new Random(1) </b>
+<b>jshell&gt; Supplier&lt;List&lt;Integer&gt;&gt; randListSupplier = () -&gt; List.of(rnd.nextInt());</b>
+<b>jshell&gt; InfiniteList&lt;List&lt;? extends Number&gt;&gt; list = InfiniteList.generate(randListSupplier);</b>
+<b>jshell&gt; /exit</b>
+
+</pre>
+
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre><code>$ checkstyle *.java
+$ javac -Xlint:rawtypes *.java
+$ jshell -q &lt; level1.jsh
+</code></pre>
+</td></tr><tr><td>
+
+<h4 id="level-2-limit-foreach-toarray">Level 2: limit, forEach, toArray</h4>
+<p>Now, let's implement three operations on your <code>InfiniteList</code>. The <code>limit</code> operation is an intermediate operation that will return a truncated infinite list (so it is now finite); <code>forEach</code> is a terminal that takes in a <code>Consumer</code> object and consumes each element in the infinite list; <code>toArray</code> converts the <code>Stream</code> into an array of <code>Object</code>.</p>
+<p>We will imitate the API of <code>Stream</code>, so two APIs you will implement for <code>InfiniteList</code> are:</p>
+<ul>
+<li><code>InfiniteList&lt;T&gt; limit(long maxSize)</code></li>
+<li><code>void forEach(Consumer&lt;? super T&gt; action)</code></li>
+<li><code>Object[] toArray()</code></li>
+</ul>
+<p>You should implement <code>limit</code> by creating an anonymous subclass of <code>InfiniteListImpl</code> with a <code>get</code> method that behaves as if the infinite list it is getting the item from is truncated to the given number of elements.</p>
+<pre><b>jshell&gt; /open InfiniteList.java</b>
+<b>jshell&gt; /open InfiniteListImpl.java</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; dots = InfiniteList.generate(() -&gt; ".").limit(4)</b>
+<b>jshell&gt; dots.forEach(System.out::println) </b>
+.
+.
+.
+.
+<b>jshell&gt; dots.forEach(System.out::println) </b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; even = InfiniteList.iterate(0, i -&gt; i + 2).limit(5)</b>
+<b>jshell&gt; even.forEach(System.out::println) </b>
+0
+2
+4
+6
+8
+<b>jshell&gt; even = InfiniteList.iterate(0, i -&gt; i + 2).limit(2)</b>
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional[0]
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional[2]
+<b>jshell&gt; even.get()</b>
+$.. ==&gt; Optional.empty
+<b>jshell&gt; InfiniteList.iterate(0, i -&gt; i + 2).limit(0).get()</b>
+$.. ==&gt; Optional.empty
+<b>jshell&gt; try { </b>
+<b>   ...&gt;   InfiniteList.iterate(0, i -&gt; i + 2).limit(-1);</b>
+<b>   ...&gt; } catch (IllegalArgumentException e) {</b>
+<b>   ...&gt;   System.out.println(e);</b>
+<b>   ...&gt; }</b>
+java.lang.IllegalArgumentException: -1
+<b>jshell&gt; InfiniteList.iterate(0, i -&gt; i + 1).limit(10).limit(3).toArray()</b>
+$.. ==&gt; Object[3] { 0, 1, 2 }
+<b>jshell&gt; InfiniteList.iterate(0, i -&gt; i + 1).limit(3).limit(100).toArray()</b>
+$.. ==&gt; Object[3] { 0, 1, 2 }
+<b>jshell&gt; InfiniteList.generate(() -&gt; 1).limit(0).toArray()</b>
+$.. ==&gt; Object[0] {  }
+<b>jshell&gt; InfiniteList.generate(() -&gt; 1).limit(2).toArray()</b>
+$.. ==&gt; Object[2] { 1, 1 }
+<b>jshell&gt; </b>
+<b>jshell&gt; </b>
+<b>jshell&gt; Consumer&lt;Object&gt; blackhole = obj -&gt; {}</b>
+<b>jshell&gt; InfiniteList.&lt;Integer&gt;generate(() -&gt; 1).limit(3).forEach(blackhole)</b>
+<b>jshell&gt; /exit</b>
+
+</pre>
+
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre><code>$ checkstyle *.java
+$ javac -Xlint:rawtypes *.java
+$ jshell -q &lt; level2.jsh
+</code></pre>
+</td></tr><tr><td>
+
+<h4 id="level-3-map-filter-takewhile">Level 3: map, filter, takeWhile</h4>
+<p>Now, implement the following three operations on an infinite list. Again, we are imitating the behaviour of <code>Stream</code>, so we will follow the corresponding specifications of Java's <code>Stream</code> APIs:</p>
+<ul>
+<li><code>&lt;S&gt; InfiniteList&lt;S&gt; map(Function&lt;? super T, ? extends S&gt; mapper)</code></li>
+<li><code>InfiniteList&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate)</code></li>
+<li><code>InfiniteList&lt;T&gt; takeWhile(Predicate&lt;? super T&gt; predicate)</code></li>
+</ul>
+<p>Similar to <code>limit</code>, you should implement the three operations above by creating an anonymous subclass of <code>InfiniteListImpl</code> and override its <code>get</code> method.</p>
+<pre><b>jshell&gt; /open InfiniteList.java</b>
+<b>jshell&gt; /open InfiniteListImpl.java</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; s = InfiniteList.generate(() -&gt; "A")</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; s = InfiniteList.generate(() -&gt; "A").map(x -&gt; x + "-")</b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; i = InfiniteList.generate(() -&gt; "A").map(x -&gt; x + "-").map(str -&gt; str.length())</b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; i = InfiniteList.generate(() -&gt; "A").map(x -&gt; x + "-").map(str -&gt; str.length())</b>
+<b>jshell&gt; InfiniteList.generate(() -&gt; "A").map(x -&gt; x + "-").map(str -&gt; str.length()).limit(4).toArray()</b>
+$.. ==&gt; Object[4] { 2, 2, 2, 2 }
+<b>jshell&gt; InfiniteList.generate(() -&gt; "A").limit(4).map(x -&gt; x + "-").map(str -&gt; str.length()).toArray()</b>
+$.. ==&gt; Object[4] { 2, 2, 2, 2 }
+<b>jshell&gt; InfiniteList.generate(() -&gt; "A").map(x -&gt; x + "-").limit(4).map(str -&gt; str.length()).toArray()</b>
+$.. ==&gt; Object[4] { 2, 2, 2, 2 }
+<b>jshell&gt; </b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; i = InfiniteList.iterate(1, x -&gt; x + 1).filter(x -&gt; x % 2 == 0)</b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; i = InfiniteList.iterate(1, x -&gt; x + 1).filter(x -&gt; x % 2 == 0).filter(x -&gt; x % 4 == 0)</b>
+<b>jshell&gt; InfiniteList.iterate(1, x -&gt; x + 1).limit(4).filter(x -&gt; x % 2 == 0).toArray()</b>
+$.. ==&gt; Object[2] { 2, 4 }
+<b>jshell&gt; InfiniteList.iterate(1, x -&gt; x + 1).filter(x -&gt; x % 2 == 0).limit(4).toArray()</b>
+$.. ==&gt; Object[4] { 2, 4, 6, 8 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).filter(x -&gt; x &gt; 10).filter(x -&gt; x &lt; 20).limit(5).toArray()</b>
+$.. ==&gt; Object[5] { 11, 12, 13, 14, 15 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).filter(x -&gt; x &gt; 10).map(x -&gt; x.hashCode() % 30).filter(x -&gt; x &lt; 20).limit(5).toArray()</b>
+$.. ==&gt; Object[5] { 11, 12, 13, 14, 15 }
+<b>jshell&gt; </b>
+<b>jshell&gt; InfiniteList&lt;Integer&gt; i = InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 3)</b>
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 3).toArray()</b>
+$.. ==&gt; Object[3] { 0, 1, 2 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 0).toArray()</b>
+$.. ==&gt; Object[0] {  }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 10).takeWhile(x -&gt; x &lt; 5).toArray()</b>
+$.. ==&gt; Object[5] { 0, 1, 2, 3, 4 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).map(x -&gt; x).takeWhile(x -&gt; x &lt; 4).limit(1).toArray()</b>
+$.. ==&gt; Object[1] { 0 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(4).takeWhile(x -&gt; x &lt; 2).toArray()</b>
+$.. ==&gt; Object[2] { 0, 1 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).map(x -&gt; x * x).filter(x -&gt; x &gt; 10).limit(2).toArray()</b>
+$.. ==&gt; Object[2] { 16, 25 }
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).filter(x -&gt; x &gt; 10).map(x -&gt; x * x).limit(2).toArray()</b>
+$.. ==&gt; Object[2] { 121, 144 }
+<b>jshell&gt; </b>
+<b>jshell&gt; Function&lt;Object,List&lt;Integer&gt;&gt; f = obj -&gt; List.&lt;Integer&gt;of(obj.hashCode() % 100, obj.hashCode() % 10)</b>
+<b>jshell&gt; InfiniteList&lt;List&lt;? super Integer&gt;&gt; list = InfiniteList.iterate("", x -&gt; "-" + x).map(f)</b>
+<b>jshell&gt; Predicate&lt;Object&gt; p = obj -&gt; obj.hashCode() % 2 == 0</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; s = InfiniteList.generate(() -&gt; "A").filter(p)</b>
+<b>jshell&gt; InfiniteList&lt;String&gt; s = InfiniteList.&lt;String&gt;generate(() -&gt; "A").takeWhile(p)</b>
+<b>jshell&gt; /exit</b>
+
+</pre>
+
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre><code>$ checkstyle *.java
+$ javac -Xlint:rawtypes *.java
+$ jshell -q &lt; level3.jsh
+</code></pre>
+</td></tr><tr><td>
+
+<h4 id="level-4-count-and-reduce">Level 4: count and reduce</h4>
+<p>Now implement the following terminal operations by following the corresponding specifications of Java's <code>Stream</code> APIs:</p>
+<ul>
+<li><code>long count()</code></li>
+<li><code>Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</code></li>
+<li><code>T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</code></li>
+</ul>
+<pre><b>jshell&gt; /open InfiniteList.java</b>
+<b>jshell&gt; /open InfiniteListImpl.java</b>
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(0).count()</b>
+$.. ==&gt; 0
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(1).count()</b>
+$.. ==&gt; 1
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).filter(x -&gt; x % 2 == 1).limit(10).count()</b>
+$.. ==&gt; 10
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(10).filter(x -&gt; x % 2 == 1).count()</b>
+$.. ==&gt; 5
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 10).count()</b>
+$.. ==&gt; 10
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).takeWhile(x -&gt; x &lt; 10).filter(x -&gt; x % 2 == 0).count()</b>
+$.. ==&gt; 5
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(5).reduce(0, (x, y) -&gt; x + y)</b>
+$.. ==&gt; 10
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(0).reduce(0, (x, y) -&gt; x + y)</b>
+$.. ==&gt; 0
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).map(x -&gt; x * x).limit(5).reduce(0, (x, y) -&gt; x + y)</b>
+$.. ==&gt; 30
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(5).reduce((x, y) -&gt; x + y)</b>
+$.. ==&gt; Optional[10]
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).limit(0).reduce((x, y) -&gt; x + y)</b>
+$.. ==&gt; Optional.empty
+<b>jshell&gt; InfiniteList.iterate(0, x -&gt; x + 1).map(x -&gt; x * x).limit(5).reduce((x, y) -&gt; x + y)</b>
+$.. ==&gt; Optional[30]
+<b>jshell&gt; /exit</b>
+
+</pre>
+
+<p>Check the format correctness of the output by typing the following Unix command</p>
+<pre><code>$ checkstyle *.java
+$ javac -Xlint:rawtypes *.java
+$ jshell -q &lt; level4.jsh
+</code></pre>
+</td></tr>
+</tbody></table>
+    </div></div>                          
+                <div class="content-header">
+                <h3>Submission (Practice)</h3>
+        </div>
+        <div id="practiceNotification"></div>
+        <div class="panel">
+            <span class="label" style="vertical-align:top">Your Files:</span>
+            <span class="value-long">
+                <div id="plupload_container">
+                    <a id="task_submission" href="javascript:;" class="submitButton">BROWSE</a>
+                </div>
+                <br>
+                <div id="filelist">Your browser doesn't have HTML5 or Flash support.</div>
+                <script type="text/javascript">
+                    var uploader;
+                    $(document).ready(function() {		
+                        uploader = new plupload.Uploader({
+                            runtimes: 'html5,flash,html4',
+                            browse_button: 'task_submission',
+                            container: 'plupload_container',
+                            prevent_duplicates: true,
+                            url: 'plupload/uploadFiles.php',
+
+                            filters: {
+                                max_file_size: '31457280', 
+                                mime_types: [
+                                    {title : "Allowed files", extensions : "java,c,cpp,h,py,jar,jsh"}	
+                                ]
+                            },
+
+                            init: {
+                                PostInit: function () {
+                                    document.getElementById('filelist').innerHTML = '';
+                                },
+
+                                FilesAdded: function (up, files) {
+                                    plupload.each(files, function(file) {
+                                        document.getElementById('filelist').innerHTML += 
+                                            '<li class="plupload_file ui-state-default plupload_delete" id="' + file.id + '" class="plupload_file_name">' +  
+                                                '<div class="plupload_file_status">' +
+                                                    '<div class="plupload_file_action">' + 
+                                                        '<div class="plupload_action_icon ui-icon ui-icon-circle-close" onclick="uploader.removeFile(uploader.getFile(\''+file.id+'\'));"> </div>' + 
+                                                    '</div>' +
+                                                    '<div class="plupload_file_name" title="' + file.name + '">' + 
+                                                        '<span class="plupload_file_name_wrapper">' + file.name + '   (<i>' + plupload.formatSize(file.size) + '</i>) <b></b>' + '</span>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</li>';
+                                    });
+                                    document.getElementById('filelist').innerHTML = '<ul class="plupload_filelist_content" id="uploader_filelist" unselectable="on">' + document.getElementById('filelist').innerHTML + '</ul>';
+
+                                },
+
+                                FilesRemoved: function(up, files) {
+                                    plupload.each(files, function(file) {
+                                        $('#' + file.id).remove();
+                                    });
+                                },
+
+                                FileUploaded: function(up, file, info) {
+                                    $('#' + file.id).remove();
+                                },
+
+                                UploadProgress: function(up, file) {
+                                    $('#' + file.id + ' b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                                },
+
+                                UploadComplete: function(up, files) {
+                                    doTaskGrade();
+                                },
+
+                                Error: function(up, err) {
+                                    alert("\nError #" + err.code + ": " + err.message);
+                                }
+                            }
+                        });
+                        uploader.init();
+
+
+                    });
+
+                </script><br>
+                <p><a href="javascript:uploader.setOption('multipart_params', { 'sess_id': 's4d1gbparjpmflsldvvodo1g2kbq2t24', 'type': 'task_submission', 'tid': '4876', 'username': 'e0407764', 'uid': '18909' }); javascript:uploader.start();" class="submitButton">SUBMIT</a>
+                (only .java, .c,  .cpp, .h, .jsh, and .py extensions allowed)</p>
+            </span>
+            <br>
+            <span class="label">&nbsp;</span>
+            <span class="value-long" style="font-size: 90%; color: #777;">To submit multiple files, click on the Browse button, then select one or more
+            files. The selected file(s) will be added to the upload queue. You can repeat this step to add more files. Check that you have all the files
+            needed for your submission. Then click on the Submit button to upload your submission.</span>
+        </div>
+                                <input type="hidden" id="tid" name="tid" value="4876">
+    </div>
