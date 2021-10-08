@@ -13,12 +13,19 @@ public class Roster extends KeyableMap<Student> {
         super.put(s);
         return this;
     }
-
+    
+    /**
+     * Gets the Grade of the Roster that is deeply nested.
+     * @param student the chosen student
+     * @param module the module the student is taking
+     * @param assessment the assessment type from that module
+     * @return the grade of the selected queries
+     */
     public String getGrade(String student, String module, String assessment) {
         if (Objects.isNull(super.get(student)) || 
             Objects.isNull(super.get(student).get(module)) ||
             Objects.isNull(super.get(student).get(module).get(assessment))) {
-                return String.format("No such record: %s %s %s",student, module, assessment);
+            return String.format("No such record: %s %s %s",student, module, assessment);
         } else {
             return super.get(student).get(module).get(assessment).getGrade();
         }

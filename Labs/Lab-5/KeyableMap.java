@@ -28,6 +28,11 @@ public class KeyableMap<V extends Keyable> implements Keyable {
         return this.key;
     }
 
+    /**
+     * Puts a key value pair into the nested HashMap.
+     * @param value takes in any Type as a key value pair to be added
+     * @return the same KeyableMap as it has to be mutable
+     */
     public KeyableMap<V> put(V value) {
         // Make mutatble
         String valueKey = value.getKey();
