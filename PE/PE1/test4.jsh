@@ -1,7 +1,12 @@
 /open Question.java
+/open LockQuestion.java
 /open FillInBlank.java
 /open MCQ.java
 /open TFQ.java
+/open Grader.java
+/open FreeTenMarksGrader.java
+/open OffByOneGrader.java
+/open DummyGrader.java
 
 Question q = new FillInBlank("Snow white and the ? dwarfs", 7)
 q.answer(3)

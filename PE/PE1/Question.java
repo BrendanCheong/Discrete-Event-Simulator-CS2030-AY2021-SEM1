@@ -1,6 +1,8 @@
 public interface Question {
 
-    public Question answer();
+    public Question answer(int answer);
+    
+    public LockQuestion lock();
     
     // private final String question;
     // private final int answer;
