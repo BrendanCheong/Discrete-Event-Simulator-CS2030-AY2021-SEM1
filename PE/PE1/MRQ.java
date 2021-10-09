@@ -13,10 +13,7 @@ public class MRQ implements Question, LockQuestion {
      * @param answers  the list of answers in order
      */
     public MRQ(String question, String[] options, int[] answers) {
-        this.question = question;
-        this.options = options;
-        this.answers = answers;
-        this.selectedOptions = new int[] { -1, -1, -1, -1 };
+        this(question, options, answers, new int[] { -1, -1, -1, -1 });
     }
 
     /**
@@ -43,13 +40,8 @@ public class MRQ implements Question, LockQuestion {
     public Question answer(int answer) {
         int[] answerOptions = this.selectedOptions.clone();
         for (int i = 0; i < answerOptions.length; ++i) {
-            if (answer == answerOptions[i]) {
-                answerOptions[i] = -1;
-                break;
-            } else if (answerOptions[i] == -1) {
-                answerOptions[i] = answer;
-                break;
-            }
+            if (answer == answerOptions[i]) { answerOptions[i] = -1; break;} 
+            else if (answerOptions[i] == -1) { answerOptions[i] = answer; break; }
         }
         return new MRQ(this.question, this.options, this.answers, answerOptions);
     }
@@ -58,21 +50,11 @@ public class MRQ implements Question, LockQuestion {
         return this;
     }
 
-    private final int[] reverseArray(int[] nums) {
-        int[] reversed = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            reversed[i] = nums[nums.length - 1 - i];
-        }
-        return reversed;
-    }
-
     private final int[] removeNegativeNumbers(int[] arr) {
         int[] output = new int[arr.length];
         int k = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] >= 0) {
-                output[k++] = arr[i];
-            }
+            if (arr[i] >= 0) output[k++] = arr[i];
         }
         return output;
     }
@@ -98,20 +80,15 @@ public class MRQ implements Question, LockQuestion {
      */
     public int mark() {
         int positiveSelectedOptions = 0;
-        int[] selectedOptions = reverseArray(this.selectedOptions);
-        for (int i : selectedOptions) {
-            if (i >= 0) {
-                ++positiveSelectedOptions;
-            }
+        for (int i : this.selectedOptions) {
+            if (i >= 0) ++positiveSelectedOptions;
         }
         if (positiveSelectedOptions != this.answers.length) {
             return 0;
         } else {
             int[] copy = removeNegativeNumbers(bubbleSort(selectedOptions));
             for (int i = 0; i < this.answers.length; ++i) {
-                if (bubbleSort(this.answers)[i] != copy[i]) {
-                    return 0;
-                }
+                if (bubbleSort(this.answers)[i] != copy[i]) return 0;
             }
             return 1;
         }
@@ -126,16 +103,9 @@ public class MRQ implements Question, LockQuestion {
         optionList += ";";
         String selectedOptions = "";
         for (int i = 0; i < bubbleSort(this.selectedOptions).length; ++i) {
-            if (bubbleSort(this.selectedOptions)[i] >= 0) {
-                selectedOptions += String.valueOf(this.selectedOptions[i]) + " ";
-            }
+            if (bubbleSort(this.selectedOptions)[i] >= 0) selectedOptions += String.valueOf(this.selectedOptions[i]) + " ";
         }
-        if (selectedOptions.length() > 0) {
-            return String.format("%s %s Your answer: [ %s]", this.question,
-                optionList, selectedOptions);
-        } else {
-            return String.format("%s %s Your answer: [ ]", this.question,
-                optionList, selectedOptions);
-        }
+        if (selectedOptions.length() > 0) return String.format("%s %s Your answer: [ %s]", this.question,optionList, selectedOptions);
+        else return String.format("%s %s Your answer: [ ]", this.question, optionList, selectedOptions);
     }
 }
