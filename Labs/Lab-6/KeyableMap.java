@@ -1,6 +1,8 @@
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 public class KeyableMap<V extends Keyable> implements Keyable {
 
@@ -41,6 +43,20 @@ public class KeyableMap<V extends Keyable> implements Keyable {
         this.map.put(valueKey, value);
 
         return this;
+    }
+
+    @Override
+    public String toString() {
+        if (this.getMap().isEmpty()) {
+            return String.format("%s: {}", this.getKey());
+        } else {
+            List<String> labs = new ArrayList<>();
+            for (String key : this.getMap().keySet()) {
+                labs.add(this.getMap().get(key).toString());
+            }
+            String processedString = labs.toString().replaceAll("\\[|\\]", "");
+            return String.format("%s: {%s}", this.getKey(), processedString);
+        }
     }
 
 }
