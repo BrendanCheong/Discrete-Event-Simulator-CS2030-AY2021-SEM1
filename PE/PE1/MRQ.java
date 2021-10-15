@@ -83,9 +83,8 @@ public class MRQ implements Question, LockQuestion {
         for (int i : this.selectedOptions) {
             if (i >= 0) ++positiveSelectedOptions;
         }
-        if (positiveSelectedOptions != this.answers.length) {
-            return 0;
-        } else {
+        if (positiveSelectedOptions != this.answers.length) return 0;
+        else {
             int[] copy = removeNegativeNumbers(bubbleSort(selectedOptions));
             for (int i = 0; i < this.answers.length; ++i) {
                 if (bubbleSort(this.answers)[i] != copy[i]) return 0;

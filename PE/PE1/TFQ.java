@@ -20,9 +20,7 @@ public class TFQ extends MCQ {
      * @return a TFQ question with the inputed option translated into MCQ integer index
      */
     public TFQ answer(String option) {
-        return option.equals("True") ? 
-            new TFQ(super.getQuestion(), this.findAnswer(), 1) :
-            new TFQ(super.getQuestion(), this.findAnswer(), 2);
+        return option.equals("True") ? new TFQ(super.getQuestion(), this.findAnswer(), 1) : new TFQ(super.getQuestion(), this.findAnswer(), 2);
     }
 
     @Override
