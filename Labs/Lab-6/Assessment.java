@@ -16,6 +16,10 @@ public class Assessment implements Keyable {
         return this.key;
     }
 
+    public void test() {
+        System.out.println("Test");
+    }
+
     @Override
     public String toString() {
         return String.format("{%s: %s}", this.getKey(), this.getGrade());
