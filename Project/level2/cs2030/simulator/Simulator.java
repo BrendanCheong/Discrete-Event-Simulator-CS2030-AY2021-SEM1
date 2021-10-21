@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 import java.util.PriorityQueue;
+import java.util.Optional;
+import java.util.NoSuchElementException;
 
 public class Simulator {
     
@@ -39,6 +41,27 @@ public class Simulator {
         this.levelStatus = levelStatus;
         this.queueAmount = queueAmount;
         this.serveTimeArray = serveTimeArray;
+    }
+
+    public void simulate() {
+        // first create all ArrivalEvents
+        // then create all servers
+        // hopefully the events will be referencing the same list of servers
+        createServers(this.numberOfServers, this.queueAmount);
+        createArriveEvents(this.numberOfCustomers);
+
+        while(!this.eventQueue.isEmpty()) {
+            Event event = this.eventQueue.poll();
+            try {
+                Optional<Event> selectedEvent = event.mutate(this.serverList);
+                Event eventToAdd = selectedEvent.map((x) -> x)
+                    .orElseThrow();
+                this.eventQueue.add(eventToAdd);
+            } catch (NoSuchElementException e) {
+                continue;
+            }
+        }
+        System.out.println(this.stats);
     }
 
     public void createServers(int numberOfServers, int queueAmount) {

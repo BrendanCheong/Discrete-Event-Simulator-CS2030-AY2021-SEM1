@@ -26,7 +26,7 @@ public abstract class Event implements Comparable<Event>{
             this.customer = Optional.<Customer>of(customer);
             this.server = Optional.<Server>of(server);
             this.eventStatus = eventStatus;
-            this.time = customer.getArrivalTime();
+            this.time = time;
             this.stats = stats;
     }
 
@@ -129,15 +129,15 @@ public abstract class Event implements Comparable<Event>{
     public String toString() {
         switch (this.getEventStatus()) {
             case("DONE"):
-                return String.format("%.3f %s done serving by %s", time, customer, server);
+                return String.format("%.3f %s done serving by %s", time, getCustomerNotNull(), getServerNotNull());
             case("LEAVE"):
-                return String.format("%.3f %s leaves", time, customer);
+                return String.format("%.3f %s leaves", time, getCustomerNotNull());
             case("WAIT"):
-                return String.format("%.3f %s waits at %s", time, customer, server);
+                return String.format("%.3f %s waits at %s", time, getCustomerNotNull(), getServerNotNull());
             case("ARRIVE"):
-                return String.format("%.3f %s arrives", time, customer);
+                return String.format("%.3f %s arrives", time, getCustomerNotNull());
             case("SERVE"):
-                return String.format("%.3f %s served by %s", time, customer, server);
+                return String.format("%.3f %s serves by %s", time, getCustomerNotNull(), getServerNotNull());
             default:
                 return "";
         } 

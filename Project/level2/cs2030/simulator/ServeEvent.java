@@ -22,7 +22,7 @@ public class ServeEvent extends Event {
 
     @Override
     public Optional<Event> mutate(List<Server> serverList) {
-        
+        System.out.println(this.toString());
         // ? use my customer waitingTime
         // ? can server be null??
         Customer customerDone = super.getServerNotNull()
@@ -34,7 +34,6 @@ public class ServeEvent extends Event {
         Event doneEvent = new DoneEvent(customerDone, super.getServerNotNull(),
             "DONE", customerDone.getTime(), this.getStats());
         
-        System.out.println(this.toString());
         return Optional.<Event>of(doneEvent);
     }
 }
