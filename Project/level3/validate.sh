@@ -33,12 +33,12 @@ L1_1_VAL=$(echo -e "0.500 1 arrives\n0.500 1 serves by server 1\n0.600 2 arrives
 
 validate "$L1_1_OUT", "$L1_1_VAL", "L1-1"
 
-# Level 2 test cases
 L1_2_OUT=$(echo -e "2\n0.500\n0.600\n0.700\n1.500\n1.600\n1.700" | java Main1)
 L1_2_VAL=$(echo -e "0.500 1 arrives\n0.500 1 serves by server 1\n0.600 2 arrives\n0.600 2 serves by server 2\n0.700 3 arrives\n0.700 3 waits at server 1\n1.500 1 done serving by server 1\n1.500 3 serves by server 1\n1.500 4 arrives\n1.500 4 waits at server 1\n1.600 2 done serving by server 2\n1.600 5 arrives\n1.600 5 serves by server 2\n1.700 6 arrives\n1.700 6 waits at server 2\n2.500 3 done serving by server 1\n2.500 4 serves by server 1\n2.600 5 done serving by server 2\n2.600 6 serves by server 2\n3.500 4 done serving by server 1\n3.600 6 done serving by server 2\n[0.450 6 0]")
 
 validate "$L1_2_OUT", "$L1_2_VAL", "L1-2"
 
+# Level 2 test cases
 L2_0_OUT=$(echo -e "2 1\n0.500 1.000\n0.600 1.000\n0.700 1.000\n1.500 1.000\n1.600 1.000\n1.700 1.000" | java Main2)
 L2_0_VAL=$(echo -e "0.500 1 arrives\n0.500 1 serves by server 1\n0.600 2 arrives\n0.600 2 serves by server 2\n0.700 3 arrives\n0.700 3 waits at server 1\n1.500 1 done serving by server 1\n1.500 3 serves by server 1\n1.500 4 arrives\n1.500 4 waits at server 1\n1.600 2 done serving by server 2\n1.600 5 arrives\n1.600 5 serves by server 2\n1.700 6 arrives\n1.700 6 waits at server 2\n2.500 3 done serving by server 1\n2.500 4 serves by server 1\n2.600 5 done serving by server 2\n2.600 6 serves by server 2\n3.500 4 done serving by server 1\n3.600 6 done serving by server 2\n[0.450 6 0]")
 
