@@ -28,7 +28,7 @@ public class Statistics {
         this.totalWaitingTime.add(time);
     }
 
-    private int getSumOfServedCustomers(){
+    private int getSumOfServedCustomers() {
         return this.numberOfServedCustomers.stream()
             .mapToInt((x) -> x)
             .sum();

@@ -1,26 +1,28 @@
 package cs2030.simulator;
 
-public class Customer implements Comparable<Customer>{
+public class Customer implements Comparable<Customer> {
     
     private final int customerId;
     private final double arrivalTime;
     private final double time; // serves as a history of sorts
     private final double serveTime; // remains fixed throughout
 
-    private enum customerState {
+    private enum CustomerState {
         ARRIVES, SERVED, LEAVES, WAITS, DONE
     }
-    private final customerState customerStatus;
+
+    private final CustomerState customerStatus;
 
     public Customer(int customerId, double arrivalTime, double serveTime) {
         this.customerId = customerId;
         this.arrivalTime = arrivalTime;
         this.time = arrivalTime;
         this.serveTime = serveTime;
-        this.customerStatus = customerState.ARRIVES;
+        this.customerStatus = CustomerState.ARRIVES;
     }
 
-    public Customer(int customerId, double arrivalTime, double time, double serveTime, customerState customerStatus) {
+    public Customer(int customerId, double arrivalTime, double time, 
+        double serveTime, CustomerState customerStatus) {
         this.customerId = customerId;
         this.arrivalTime = arrivalTime;
         this.time = time;
@@ -56,42 +58,42 @@ public class Customer implements Comparable<Customer>{
 
     public Customer setServed() {
         return new Customer(getCustomerId(), getArrivalTime(), getTime(), 
-            getServeTime(), customerState.SERVED);
+            getServeTime(), CustomerState.SERVED);
     }
 
     public Customer setLeave() {
         return new Customer(getCustomerId(), getArrivalTime(), getTime(), 
-            getServeTime(), customerState.LEAVES);
+            getServeTime(), CustomerState.LEAVES);
     }
 
     public Customer setWait() {
         return new Customer(getCustomerId(), getArrivalTime(), getTime(), 
-            getServeTime(), customerState.WAITS);
+            getServeTime(), CustomerState.WAITS);
     }
 
     public Customer setDone() {
         return new Customer(getCustomerId(), getArrivalTime(), getTime(), 
-            getServeTime(), customerState.DONE);
+            getServeTime(), CustomerState.DONE);
     }
 
     public boolean isArrived() {
-        return this.customerStatus == customerState.ARRIVES;
+        return this.customerStatus == CustomerState.ARRIVES;
     }
 
     public boolean isServed() {
-        return this.customerStatus == customerState.SERVED;
+        return this.customerStatus == CustomerState.SERVED;
     }
 
     public boolean hasLeft() {
-        return this.customerStatus == customerState.LEAVES;
+        return this.customerStatus == CustomerState.LEAVES;
     }
 
     public boolean isDone() {
-        return this.customerStatus == customerState.DONE;
+        return this.customerStatus == CustomerState.DONE;
     }
 
     public boolean isWaiting() {
-        return this.customerStatus == customerState.WAITS;
+        return this.customerStatus == CustomerState.WAITS;
     }
 
     @Override

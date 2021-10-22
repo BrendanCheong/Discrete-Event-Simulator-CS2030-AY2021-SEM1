@@ -1,5 +1,5 @@
 # will auto detech your Main1,Main2,Main3,Main4 scripts
-# just run bash validate.sh in the file where your Main.java lies
+# just run bash validate.sh in the folder where your Main.java lies
 validate() {
     if [ "$1" == "$2" ]; then
         echo "$3 Cleared"
@@ -22,7 +22,7 @@ validate() {
 
 FLAG=$@
 
-Level 1 test cases
+#Level 1 test cases
 L1_0_OUT=$(echo -e "1\n0.500\n0.600\n0.700" | java Main1)
 L1_0_VAL=$(echo -e "0.500 1 arrives\n0.500 1 serves by server 1\n0.600 2 arrives\n0.600 2 waits at server 1\n0.700 3 arrives\n0.700 3 leaves\n1.500 1 done serving by server 1\n1.500 2 serves by server 1\n2.500 2 done serving by server 1\n[0.450 2 1]")
 

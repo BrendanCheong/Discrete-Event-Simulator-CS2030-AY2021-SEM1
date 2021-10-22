@@ -3,7 +3,7 @@ package cs2030.simulator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 import java.util.PriorityQueue;
 import java.util.Optional;
 import java.util.NoSuchElementException;
@@ -32,7 +32,7 @@ public class Simulator {
     // constructor for level 2
     public Simulator(int numberOfServers, List<Double> timeArray, int numberOfCustomers, 
         int levelStatus, int queueAmount, List<Double> serveTimeArray) {
-        this.eventQueue = new PriorityQueue<>(); // add Comparator later
+        this.eventQueue = new PriorityQueue<>(new EventComparator());
         this.serverList = new ArrayList<>();
         this.stats = new Statistics();
         this.numberOfServers = numberOfServers;
@@ -50,7 +50,7 @@ public class Simulator {
         createServers(this.numberOfServers, this.queueAmount);
         createArriveEvents(this.numberOfCustomers);
 
-        while(!this.eventQueue.isEmpty()) {
+        while (!this.eventQueue.isEmpty()) {
             Event event = this.eventQueue.poll();
             try {
                 Optional<Event> selectedEvent = event.mutate(this.serverList);
@@ -66,12 +66,14 @@ public class Simulator {
 
     public void createServers(int numberOfServers, int queueAmount) {
         if (this.levelStatus <= 2) { //! take note of level status clause
-            for (int index = 0; index < numberOfServers; ++index) {
-                Server server = new Server(index + 1, queueAmount);
-                // no rest time LinkedList, initiate as empty linkedList on Server class
-                // check if rest time is Empty, if so, then rest time is 0 by default
-                this.serverList.add(server);
-            }
+            // no rest time LinkedList, initiate as empty linkedList on Server class
+            // check if rest time is Empty, if so, then rest time is 0 by default
+            IntStream
+                .range(0, numberOfServers)
+                .forEachOrdered((index) -> {
+                    Server server = new Server(index + 1, queueAmount);
+                    this.serverList.add(server);
+                });
         }
     }
 
@@ -82,10 +84,10 @@ public class Simulator {
         for (int index = 0; index < numberOfCustomers; ++index) {
             double arrivalTime = arrivalTimes.get(index);
             double serveTime = serveTimes.get(index);
-
-            Customer customer = new Customer(index + 1, arrivalTime, serveTime); // same for level 1 and beyond
-            Event ArrivalEvent = new ArrivalEvent(customer, "ARRIVE", this.stats);
-            this.eventQueue.add(ArrivalEvent);
+            // same for level 1 and beyond
+            Customer customer = new Customer(index + 1, arrivalTime, serveTime); 
+            Event arrivalEvent = new ArrivalEvent(customer, "ARRIVE", this.stats);
+            this.eventQueue.add(arrivalEvent);
         }
     }
 }

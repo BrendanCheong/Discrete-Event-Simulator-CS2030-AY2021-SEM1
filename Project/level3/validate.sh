@@ -1,5 +1,5 @@
-# will auto detech your Main1,Main2,Main3 scripts
-# just run bash validate.sh in the file where your Main.java lies
+# will auto detech your Main1,Main2,Main3,Main4 scripts
+# just run bash validate.sh in the folder where your Main.java lies
 validate() {
     if [ "$1" == "$2" ]; then
         echo "$3 Cleared"

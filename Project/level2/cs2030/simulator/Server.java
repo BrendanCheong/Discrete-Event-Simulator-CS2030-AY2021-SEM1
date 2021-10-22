@@ -51,7 +51,7 @@ public class Server {
         try {
             Customer customer = currentCustomer.map((x) -> x)
                 .orElseThrow();
-            return false;
+            return false; // if there is a customer(no empty value error) then server is not Idle
         } catch (NoSuchElementException e) {
             return true && this.queue.isEmpty();
         }

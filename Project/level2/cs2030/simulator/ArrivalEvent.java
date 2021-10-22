@@ -3,6 +3,7 @@ package cs2030.simulator;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class ArrivalEvent extends Event {
     
@@ -27,33 +28,42 @@ public class ArrivalEvent extends Event {
         Optional<Event> outputEvent = Optional.empty();
         System.out.println(this.toString());
 
-        for (Server server : serverList) {
-            if (server.isIdle()) {
+        outputEvent = serverList
+            .stream()
+            .filter((server) -> server.isIdle())
+            .map((server) -> {
                 Event servedEvent = new ServeEvent(super.getCustomerNotNull().setServed(),
                     server, "SERVE", super.getTime(), this.getStats());
-                outputEvent = Optional.<Event>of(servedEvent);
-                serveCondition = true;
-                break;
-            }
-        }
+                return servedEvent;
+            })
+            .findFirst();
 
-        if(serveCondition == false) {
-            for (Server server : serverList) {
-                if (server.isFull() == false) {
+        serveCondition = serverList
+            .stream()
+            .anyMatch((server) -> server.isIdle());
+
+        if (serveCondition == false) {
+            outputEvent = serverList
+                .stream()
+                .filter((server) -> !server.isFull()) // wait event if the server has queue space
+                .map((server) -> {
                     Event waitEvent = new WaitEvent(super.getCustomerNotNull().setWait(),
                         server, "WAIT", super.getTime(), this.getStats());
-                    outputEvent = Optional.<Event>of(waitEvent);
-                    serveCondition = true;
-                    break;
-                }
-            }
+                    return waitEvent;
+                })
+                .findFirst();
+
+            serveCondition = serverList
+                .stream()
+                .anyMatch((server) -> !server.isFull());
         }
 
         if (serveCondition) {
             this.getStats().addServedCustomersByOne();
         } else {
-            this.getStats().addLeftCustomersByOne();
-            Optional<Customer> customer = Optional.<Customer>of(super.getCustomerNotNull().setLeave());
+            this.getStats().addLeftCustomersByOne(); // if not then just leave
+            Optional<Customer> customer = 
+                Optional.<Customer>of(super.getCustomerNotNull().setLeave());
             Event leftEvent = new LeaveEvent(customer, super.getServer(), 
                 "LEAVE", super.getTime(), this.getStats());
             

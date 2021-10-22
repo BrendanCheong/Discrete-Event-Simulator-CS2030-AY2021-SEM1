@@ -24,7 +24,8 @@ public class WaitEvent extends Event {
     public Optional<Event> mutate(List<Server> serverList) {
         System.out.println(this.toString());
 
-        this.proccessWait(); // instead of adding to EventQueue, you change previous Event's Server customer queue
+        // instead of adding to EventQueue, you change previous Event's Server customer queue
+        this.proccessWait(); 
         return Optional.empty();
     }
 }
