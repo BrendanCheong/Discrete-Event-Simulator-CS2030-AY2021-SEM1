@@ -10,6 +10,7 @@ Main.reverse("")
 Main.reverse("the quick brown fox jumps over the lazy dog.")
 
 Main.countRepeats(0,1,2,2,1,2,2,1,3,3,1)
+Main.countRepeats(0,1,1,2,2) // output: 2
 
 Main.normalizedMean(Stream.of(1, 2, 3, 4, 5))
 Main.normalizedMean(Stream.of(1, 1))

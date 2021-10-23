@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Main {
 
@@ -18,7 +19,7 @@ public class Main {
      * @param n given a number, counts the number of twin prime pairs to that number
      * @return the number of twin prime pairs starting from 2
      */
-    public static long countTwinPrimes(int n) {
+    static long countTwinPrimes(int n) {
         return IntStream
             .range(3, n + 1)
             .filter((x) -> isPrime(x) && (isPrime(x - 2) || isPrime(x + 2)))
@@ -31,7 +32,7 @@ public class Main {
      * @param str reverses the given string by adding backwards
      * @return the reversed String inputed
      */
-    public static String reverse(String str) {
+    static String reverse(String str) {
         return str
             .chars() // Instream map only allows int -> int, so I use mapToObj
             .mapToObj((ascii) -> String.valueOf((char) ascii))
@@ -43,20 +44,21 @@ public class Main {
      * @param array uses Lists to count the number of repeated pairs from input array
      * @return the number of pairs found
      */
-    public static long countRepeats(Integer...array) {
+    static long countRepeats(int...array) {
         List<Integer> intList = new ArrayList<>();
-        Stream<Integer> intStream = Stream.of(array);
+        intList.add(420);
+        IntStream intStream = Arrays.stream(array);
         intStream
             .forEachOrdered((x) -> intList.add(x));
         int arrayLength = array.length;
 
         List<Integer> countedList = IntStream
-            .range(1, arrayLength - 1)
+            .range(1, arrayLength)
             .filter((x) -> intList.get(x) == intList.get(x + 1) &&
                 intList.get(x) != intList.get(x - 1))
             .mapToObj((x) -> intList.get(x))
             .collect(Collectors.toList());
-        return countedList.size();
+        return (long) countedList.size();
     }
 
     /**
@@ -64,25 +66,27 @@ public class Main {
      * @param stream the inputed Stream of Integers, can be empty
      * @return the normalized mean, if empty stream return 0.0 automatically
      */
-    public static double normalizedMean(Stream<Integer> stream) {
+    static double normalizedMean(Stream<Integer> stream) {
         List<Integer> streamList = stream
             .sorted()
             .collect(Collectors.toList());
 
-        if (streamList.isEmpty()) {
+        try {
+            int max = streamList
+                .get(streamList.size() - 1);
+            int min = streamList
+                .get(0);
+            int size = streamList
+                .size();
+            int sum = streamList
+                .stream()
+                .reduce(0, (x, y) -> x + y);
+            return Optional.<Double>of((double) ((sum / size) - min) / (max - min))
+                .filter((x) -> !x.isNaN())
+                .map((x) -> x)
+                .orElseThrow();
+        } catch (Exception e) {
             return 0.0;
         }
-
-        int max = streamList
-            .get(streamList.size() - 1);
-        int min = streamList
-            .get(0);
-        int size = streamList
-            .size();
-        int sum = streamList
-            .stream()
-            .reduce(0, (x, y) -> x + y);
-        double normalizedMean = (double) ((sum / size) - min) / (max - min);
-        return (min == max) ? 0.0 : normalizedMean;
     }
 }
