@@ -5,33 +5,40 @@ import java.util.stream.IntStream;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Main2 {
+public class Main3 {
     /**
      * Takes in number of servers and arrival times to simulate restaurant.
      * <p>simulates the entire restaurant with simulate method</p>
      * @param args takes in an array of arrival times and number of servers
      **/
     public static void main(String[] args) {
-        int levelStatus = 2;
+        int levelStatus = 3;
         Scanner sc = new Scanner(System.in);
-        List<Double> timeArray = new ArrayList<>();
-        List<Double> serveTimeArray = new ArrayList<>();
+        List<Double> timeArray = new ArrayList<>(100);
+        List<Double> serveTimeArray = new ArrayList<>(100);
         LinkedList<Double> restTimeArray = new LinkedList<>();
 
         int numServers = sc.nextInt();
         int queueAmount = sc.nextInt();
+        int numberOfCustomers = sc.nextInt();
 
         while (sc.hasNextDouble()) {
-            double arrivalTime = sc.nextDouble();
-            timeArray.add(arrivalTime);
-            double serveTime = sc.nextDouble();
-            serveTimeArray.add(serveTime);
+            if (numberOfCustomers > 0) {
+                double arrivalTime = sc.nextDouble();
+                timeArray.add(arrivalTime);
+                double serveTime = sc.nextDouble();
+                serveTimeArray.add(serveTime);
+                --numberOfCustomers;
+            } else {
+                restTimeArray.add(sc.nextDouble());
+            }
         }
-        int numberOfCustomers = timeArray.size();
 
-        IntStream
-            .range(0, numberOfCustomers)
-            .forEach((x) -> restTimeArray.add(0.00));
+        // System.out.println(timeArray);
+        // System.out.println(serveTimeArray);
+        // System.out.println(restTimeArray);
+
+        numberOfCustomers = timeArray.size();
 
         Simulator simulator = new Simulator(numServers, timeArray, numberOfCustomers, levelStatus,
             queueAmount, serveTimeArray, restTimeArray);

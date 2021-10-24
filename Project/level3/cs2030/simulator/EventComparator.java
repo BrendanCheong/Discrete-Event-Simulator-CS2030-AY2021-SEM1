@@ -13,7 +13,13 @@ public class EventComparator implements Comparator<Event> {
 
         // check for tie-breaker
         if (Math.abs((event1Time - event2Time) / event1Time) < 1e-9) {
-            return event1Customer.compareTo(event2Customer);
+            if (event2.isServerEvent()) {
+                return 1;
+            } else if (event1.isServerEvent()) {
+                return -1;
+            } else {
+                return event1Customer.compareTo(event2Customer);
+            }
         }
 
         if (event1Time < event2Time) {

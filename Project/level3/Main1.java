@@ -1,5 +1,7 @@
 import cs2030.simulator.Simulator;
 import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.stream.IntStream;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ public class Main1 {
         Scanner sc = new Scanner(System.in);
         List<Double> timeArray = new ArrayList<>();
         List<Double> serveTimeArray = new ArrayList<>();
+        LinkedList<Double> restTimeArray = new LinkedList<>();
 
         int numServers = sc.nextInt();
 
@@ -25,8 +28,12 @@ public class Main1 {
 
         int numberOfCustomers = timeArray.size();
 
+        IntStream
+            .range(0, numberOfCustomers)
+            .forEach((x) -> restTimeArray.add(0.00));
+
         Simulator simulator = new Simulator(numServers, timeArray, numberOfCustomers, levelStatus,
-            1, serveTimeArray); // default queueAmount for waitingCustomers is 1
+            1, serveTimeArray, restTimeArray); // default queueAmount for waitingCustomers is 1
         
         simulator.simulate();
 

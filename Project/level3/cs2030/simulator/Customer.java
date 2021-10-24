@@ -71,25 +71,31 @@ public class Customer implements Comparable<Customer> {
             getServeTime(), "DONE");
     }
 
-    public boolean isArrived() {
-        return this.customerStatus.equals("ARRIVES");
+    public Customer setDummy() {
+        return new Customer(getCustomerId(), getArrivalTime(), getTime(), 
+            getServeTime(), "Dummy");
     }
 
-    public boolean isServed() {
-        return this.customerStatus.equals("SERVED");
-    }
+    //! I may not actually need these commented lines of code
+    // public boolean isArrived() {
+    //     return this.customerStatus.equals("ARRIVES");
+    // }
 
-    public boolean hasLeft() {
-        return this.customerStatus.equals("LEAVES");
-    }
+    // public boolean isServed() {
+    //     return this.customerStatus.equals("SERVED");
+    // }
 
-    public boolean isDone() {
-        return this.customerStatus.equals("DONE");
-    }
+    // public boolean hasLeft() {
+    //     return this.customerStatus.equals("LEAVES");
+    // }
 
-    public boolean isWaiting() {
-        return this.customerStatus.equals("WAITS");
-    }
+    // public boolean isDone() {
+    //     return this.customerStatus.equals("DONE");
+    // }
+
+    // public boolean isWaiting() {
+    //     return this.customerStatus.equals("WAITS");
+    // }
 
     @Override
     public boolean equals(Object obj) {

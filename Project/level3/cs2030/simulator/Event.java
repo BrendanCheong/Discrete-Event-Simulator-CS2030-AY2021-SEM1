@@ -85,6 +85,19 @@ public class Event {
         return this.eventStatus.equals("LEAVE");
     }
 
+    public boolean isServerRestEvent() {
+        return this.eventStatus.equals("SERVER REST");
+    }
+
+    public boolean isServerBackEvent() {
+        return this.eventStatus.equals("SERVER BACK");
+    }
+
+    public boolean isServerEvent() {
+        return this.eventStatus.equals("SERVER REST") || 
+            this.eventStatus.equals("SERVER BACK");
+    }
+
     public Event serve(Server server) {
         return new Event(this.getCustomerNotNull().setServed(), server,
             "SERVE", this.getTime());
@@ -101,8 +114,24 @@ public class Event {
     }
 
     public Event done() {
-        return new Event(Optional.<Customer>of(this.getCustomerNotNull().setDone()), 
-            Optional.empty(), "DONE", this.getTime());
+        // !Customer customer =  line is optional/not needed? need further testing
+        Customer customer = this.getServerNotNull().serve(this.getCustomerNotNull());
+        return new Event(Optional.<Customer>of(customer), 
+            this.getServer(), "DONE", this.getTime());
+    }
+
+    public Event goToRest() { //server Rests
+        //! apparently I must input any Optional.<Customer>of(any value)
+        //! or else it won't work
+        return new Event(Optional.<Customer>of(this.getCustomerNotNull().setDummy()), 
+            this.getServer(), "SERVER REST", this.getTime());
+    }
+
+    public Event backFromRest() {
+        //! apparently I must input any Optional.<Customer>of(any value)
+        //! or else it won't work
+        return new Event(Optional.<Customer>of(this.getCustomerNotNull().setDummy()), 
+            this.getServer(),"SERVER BACK", this.getServerNotNull().getCanServeAt());
     }
 
     public Optional<Event> mutate(List<Server> serverList) {
@@ -115,6 +144,9 @@ public class Event {
                 return processWaitEvent();
             case ("DONE"):
                 return processDoneEvent();
+            case ("SERVER REST"):
+            case ("SERVER BACK"):
+                return processServerEvent();
             default:
                 return processLeaveEvent();
         }
@@ -124,16 +156,23 @@ public class Event {
         Optional<Customer> newServedCustomer = this.getServerNotNull().done();
 
         if (newServedCustomer.isEmpty()) {
-            return Optional.empty();
+            if (this.getServerNotNull().isResting()) {
+                return Optional.<Event>of(this.goToRest());
+            } else {
+                //! remove the else statement to return Optional.empty()? need further testing
+                return Optional.empty();
+            }
         }
 
         try {
-            Customer newCustomer = newServedCustomer.map((x) -> x).orElseThrow();
+            Customer newCustomer = newServedCustomer
+                .map((x) -> x)
+                .orElseThrow();
             double newTime = newCustomer.getTime();
             Event serveEvent = new Event(newCustomer, this.getServerNotNull(), 
                 "SERVE", newTime);
+
             return Optional.<Event>of(serveEvent);
-            // return Optional.empty();
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -227,6 +266,39 @@ public class Event {
             return newEvent;
         }
         return Optional.empty();
+    }
+
+    public Optional<Event> processServerBack() {
+        Optional<Customer> newlyServedCustomer = this.getServerNotNull().comeBackFromRest();
+
+        try {
+            Customer customer = newlyServedCustomer
+                .map((x) -> x)
+                .orElseThrow();
+            Event serveEvent = new Event(customer, this.getServerNotNull(),
+                "SERVE", customer.getTime());
+            return Optional.<Event>of(serveEvent);
+        } catch (NoSuchElementException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Event> processServerEvent() {
+        if (this.isServerRestEvent()) {
+            Event serverBack = this.backFromRest();
+
+            return Optional.<Event>of(serverBack);
+        } else {
+            Optional<Event> newEvent = this.processServerBack();
+
+            try {
+                return Optional.<Event>of(newEvent
+                    .map((x) -> x)
+                    .orElseThrow());
+            } catch (NoSuchElementException e) {
+                return Optional.empty();
+            }
+        }
     }
 
     @Override

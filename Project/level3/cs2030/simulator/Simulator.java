@@ -2,6 +2,7 @@ package cs2030.simulator;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.stream.IntStream;
 import java.util.PriorityQueue;
 import java.util.Optional;
@@ -17,27 +18,30 @@ public class Simulator {
     private final int levelStatus;
     private final int queueAmount;
     private final List<Double> serveTimeArray;
+    private final LinkedList<Double> restTimeArray;
 
     // constructor for level 1
     // default queueAmount for waiting = 1
     // default serveTimeArray = an Array of 1.000 created in Main 1
     public Simulator(int numberOfServers, List<Double> timeArray, int numberOfCustomers, 
-        int levelStatus, List<Double> serveTimeArray) {
+        int levelStatus, List<Double> serveTimeArray, LinkedList<Double> restTimeArray) {
         this(numberOfServers, timeArray, numberOfCustomers, levelStatus, 
-            1, serveTimeArray);
+            1, serveTimeArray, restTimeArray);
     }
 
-    // constructor for level 2
+    // constructor for level 2 - 5
     public Simulator(int numberOfServers, List<Double> timeArray, int numberOfCustomers, 
-        int levelStatus, int queueAmount, List<Double> serveTimeArray) {
+        int levelStatus, int queueAmount, List<Double> serveTimeArray, 
+        LinkedList<Double> restTimeArray) {
         this.eventQueue = new PriorityQueue<>(new EventComparator());
-        this.serverList = new ArrayList<>();
+        this.serverList = new ArrayList<>(100);
         this.numberOfServers = numberOfServers;
         this.timeArray = timeArray;
         this.numberOfCustomers = numberOfCustomers;
         this.levelStatus = levelStatus;
         this.queueAmount = queueAmount;
         this.serveTimeArray = serveTimeArray;
+        this.restTimeArray = restTimeArray;
         createServers(numberOfServers, queueAmount);
         createArriveEvents(numberOfCustomers);
     }
@@ -50,13 +54,13 @@ public class Simulator {
         // !so add a rest time to all the servers rest List for every server in  serverList
         // !do it for every serve event, then when the server wants to rest after a done event, it will take the rest number!
         // !which is the first element of the list!
+        // !or just get the easy way out and use private static LinkedList for rest times lmao
         List<Integer> numberOfServedCustomers = new ArrayList<>();
         List<Integer> numberOfLeftCustomers = new ArrayList<>();
         List<Double> totalWaitingTime = new ArrayList<>();
-
         while (!this.eventQueue.isEmpty()) {
             Event event = this.eventQueue.poll();
-
+            
             try {
                 Optional<Event> selectedEvent = event.mutate(this.serverList);
                 Event eventToAdd = selectedEvent
@@ -73,6 +77,7 @@ public class Simulator {
 
                     numberOfLeftCustomers.add(1);
                 }
+
                 this.eventQueue.add(eventToAdd);
             } catch (NoSuchElementException e) {
                 continue;
@@ -84,16 +89,14 @@ public class Simulator {
     }
 
     public void createServers(int numberOfServers, int queueAmount) {
-        if (this.levelStatus <= 2) { //! take note of level status clause
-            // no rest time LinkedList, initiate as empty linkedList on Server class
-            // check if rest time is Empty, if so, then rest time is 0 by default
-            IntStream
-                .range(0, numberOfServers)
-                .forEachOrdered((index) -> {
-                    Server server = new Server(index + 1, queueAmount);
-                    this.serverList.add(server);
-                });
-        }
+        // no rest time LinkedList, initiate as empty linkedList on Server class
+        // check if rest time is Empty, if so, then rest time is 0 by default
+        IntStream
+            .range(0, numberOfServers)
+            .forEachOrdered((index) -> {
+                Server server = new Server(index + 1, queueAmount, this.restTimeArray);
+                this.serverList.add(server);
+            });
     }
 
     public void createArriveEvents(int numberOfCustomers) {
@@ -105,7 +108,7 @@ public class Simulator {
             .forEachOrdered((index) -> {
                 double arrivalTime = arrivalTimes.get(index);
                 double serveTime = serveTimes.get(index);
-                // same for level 1 and beyond
+
                 Customer customer = new Customer(index + 1, arrivalTime, serveTime); 
                 Event arrivalEvent = new Event(customer, "ARRIVE");
                 this.eventQueue.add(arrivalEvent);
