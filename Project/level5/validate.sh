@@ -3,6 +3,9 @@
 validate() {
     if [ "$1" == "$2" ]; then
         echo "$3 Cleared"
+        if [ "$3 Cleared" == "L5-4 Cleared" ]; then
+            echo "Congratulations! You did it!"
+        fi
     else
         echo "$3 Failed"
         echo "-----------OUTPUT-----------"
