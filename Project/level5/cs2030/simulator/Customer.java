@@ -4,12 +4,21 @@ public abstract class Customer implements Comparable<Customer> {
     
     private final int customerId;
     private final double arrivalTime;
-    private final double time; // serves as a history of sorts
-    private final double serveTime; // remains fixed throughout
+    private final double time;
+    private final double serveTime;
     private final double greedyProbability;
     private final RandomGenerator random;
     private final boolean useRandomMachine;
 
+    /**
+     * Creates a customer that needs to be served and takes time to be served.
+     * @param customerId customer id
+     * @param arrivalTime time customer arrived to restaurant
+     * @param serveTime amount of time customer needs to take to be served
+     * @param greedyProbability probability of being a greedy customer
+     * @param random the random number generator
+     * @param useRandomMachine to use rng or not use
+     */
     public Customer(int customerId, double arrivalTime, double serveTime,
         double greedyProbability, RandomGenerator random, boolean useRandomMachine) {
 
@@ -19,6 +28,17 @@ public abstract class Customer implements Comparable<Customer> {
             useRandomMachine);
     }
 
+    /**
+     * Creates a customer that needs to be served and takes time to be served.
+     * <p> now with a record of the last time the customer was served </p>
+     * @param customerId customer id
+     * @param arrivalTime time customer arrived to restaurant
+     * @param time record of the last time the customer was served
+     * @param serveTime amount of time customer needs to take to be served
+     * @param greedyProbability probability of being a greedy customer
+     * @param random the random number generator
+     * @param useRandomMachine to use rng or not use
+     */
     public Customer(int customerId, double arrivalTime, double time, 
         double serveTime, double greedyProbability, 
         RandomGenerator random, boolean useRandomMachine) {
@@ -66,13 +86,6 @@ public abstract class Customer implements Comparable<Customer> {
     public abstract boolean isGreedy();
 
     public abstract Customer setTime(double newTime);
-    
-    @Override
-    public boolean equals(Object obj) {
-        Customer customer = (Customer) obj;
-
-        return this.customerId == customer.getCustomerId();
-    }
 
     @Override
     public int compareTo(Customer customer) {

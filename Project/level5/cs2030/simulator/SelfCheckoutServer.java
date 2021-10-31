@@ -52,8 +52,6 @@ public class SelfCheckoutServer extends Server {
         return false;
     }
 
-    //! remember to put @Override here later for when Server needs the rng
-    //! for now always put a LinkedList with 0s only for all Self-Checkout Servers
     @Override
     public boolean decideToRest() {
         return false;

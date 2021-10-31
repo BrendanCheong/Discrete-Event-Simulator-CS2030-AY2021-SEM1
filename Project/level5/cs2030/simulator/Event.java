@@ -12,14 +12,26 @@ public class Event {
     private final String eventStatus;
     private final double time;
 
+    /**
+     * Creates an default event, that has no server.
+     * <p> time event is created is customer's arrival time </p>
+     * @param customer takes a customer for the event
+     * @param eventStatus the type of event: serve, wait, leave etc
+     */
     public Event(Customer customer, String eventStatus) {
-        // by default, the event has no server allocated as we do not know what kind of event it is
         this.customer = Optional.<Customer>of(customer);
         this.server = Optional.empty();
         this.eventStatus = eventStatus;
         this.time = customer.getArrivalTime();
     }
 
+    /**
+     * Creates an event, takes in customer and server thats not null.
+     * @param customer a not null customer
+     * @param server a not null server
+     * @param eventStatus the type of event: serve, wait, leave etc
+     * @param time the time the event is created
+     */
     public Event(Customer customer, Server server, 
         String eventStatus, double time) {
         this.customer = Optional.<Customer>of(customer);
@@ -28,6 +40,13 @@ public class Event {
         this.time = time;
     }
 
+    /**
+     * Creates an event, takes in customer and servers that can be null.
+     * @param customer a possibly null customer
+     * @param server a possibly null server
+     * @param eventStatus the type of event: serve, wait, leave etc
+     * @param time the time the event is created
+     */
     public Event(Optional<Customer> customer, Optional<Server> server,
         String eventStatus, double time) {
         this.customer = customer;
@@ -44,6 +63,10 @@ public class Event {
         return this.server;
     }
 
+    /**
+     * Gets the current Customer in the event, guaranteed to not be null.
+     * @return returns a customer that is not null
+     */
     public Customer getCustomerNotNull() {
         return this.getCustomer()
             .map((x) -> x)
@@ -51,6 +74,10 @@ public class Event {
         
     }
 
+    /**
+     * Gets the current Server in the event, guaranteed to not be null. 
+     * @return returns a server that is not null
+     */
     public Server getServerNotNull() {
         return this.getServer()
             .map((x) -> x)
@@ -93,42 +120,60 @@ public class Event {
             "WAIT", this.getTime());
     }
 
+    /**
+     * Creates a leave event.
+     * @return leave event that has no customer and no server
+     */
     public Event leave() {
         return new Event(Optional.<Customer>of(this.getCustomerNotNull()), 
             Optional.empty(), "LEAVE", this.getTime());
     }
 
+    /**
+     * Creates a done event.
+     * @return a done event, has a served customer and previous event's server
+     */
     public Event done() {
-        // !Customer customer =  line is optional/not needed? need further testing
         Customer customer = this.getServerNotNull().serve(this.getCustomerNotNull());
         return new Event(Optional.<Customer>of(customer), 
             this.getServer(), "DONE", this.getTime());
     }
 
-    public Event goToRest() { //server Rests
-
+    /**
+     * Creates a rest event.
+     * @return rest event has the prevous event's customer and server
+     */
+    public Event goToRest() {
         return new Event(Optional.<Customer>of(this.getCustomerNotNull()), 
             this.getServer(), "SERVER REST", this.getTime());
     }
 
+    /**
+     * Creates a return from rest event.
+     * @return return from rest event has the prevous event's customer and server
+     */
     public Event backFromRest() {
-
         return new Event(Optional.<Customer>of(this.getCustomerNotNull()), 
             this.getServer(),"SERVER BACK", this.getServerNotNull().getCanServeAt());
     }
 
+    /**
+     * Controls which next event to progress to.
+     * @param serverList list of all servers in the simulation
+     * @return the next event to progress to for the simulation to continue
+     */
     public Optional<Event> mutate(List<Server> serverList) {
-        switch(this.getEventStatus()) {
-            case ("ARRIVE"):
+        switch (this.getEventStatus()) {
+            case("ARRIVE"):
                 return processArriveEvent(serverList);
-            case ("SERVE"):
+            case("SERVE"):
                 return processServeEvent();
-            case ("WAIT"):
+            case("WAIT"):
                 return processWaitEvent();
-            case ("DONE"):
+            case("DONE"):
                 return processDoneEvent();
-            case ("SERVER REST"):
-            case ("SERVER BACK"):
+            case("SERVER REST"):
+            case("SERVER BACK"):
                 return processServerEvent();
             default:
                 return processLeaveEvent();
@@ -145,10 +190,7 @@ public class Event {
         } catch (NoSuchElementException e) {
             if (this.getServerNotNull().isResting()) {
                 return Optional.<Event>of(this.goToRest());
-            } else {
-                //! remove the else statement to return Optional.empty()? need further testing
-                return Optional.empty();
-            }
+            } 
         }
 
         try {
@@ -170,6 +212,15 @@ public class Event {
         this.getServerNotNull().addToQueue(this.getCustomerNotNull());
     }
 
+    /**
+     * Decides what to do after an arrive event.
+     * <p> can either progress to a wait event based on customer type </p>
+     * <p> and if the current server is serving a customer </p>
+     * <p> or can choose leave if the server's queue is full </p>
+     * <p> or can choose to serve the next customer in the server's queue </p>
+     * @param serverList list of all available servers to choose from
+     * @return the next event to progress to
+     */
     public Optional<Event> processArriveEvent(List<Server> serverList) {
         boolean serveCondition = false;
         Optional<Event> outputEvent = Optional.empty();
@@ -242,6 +293,10 @@ public class Event {
         return outputEvent;
     }
 
+    /**
+     * Decides what to do after a serve event.
+     * @return a done event after being served
+     */
     public Optional<Event> processServeEvent() {
         System.out.println(this.toString());
         Customer customerDone = this.getServerNotNull()
@@ -254,12 +309,20 @@ public class Event {
         return Optional.<Event>of(doneEvent);
     }
 
+    /**
+     * Decides what to do after a leave event.
+     * @return state that the customer has left and return no next event
+     */
     public Optional<Event> processLeaveEvent() {
         System.out.println(this.toString());
 
         return Optional.empty();
     }
 
+    /**
+     * Decides what to do after a wait event.
+     * @return state that the customer is waiting & add a customer to server's queue
+     */
     public Optional<Event> processWaitEvent() {
         System.out.println(this.toString());
 
@@ -270,6 +333,10 @@ public class Event {
         return Optional.empty();
     }
 
+    /**
+     * Decides what to do after a done event.
+     * @return either goes to rest, continue serving or state that the server is empty
+     */
     public Optional<Event> processDoneEvent() {
         System.out.println(this.toString());
 
@@ -285,6 +352,10 @@ public class Event {
         }
     }
 
+    /**
+     * Decide what to do after the server returns from rest.
+     * @return either goes back to a serve event or state that the server is empty
+     */
     public Optional<Event> processServerBack() {
         Optional<Customer> newlyServedCustomer = this.getServerNotNull().comeBackFromRest();
 
@@ -300,6 +371,10 @@ public class Event {
         }
     }
 
+    /**
+     * Decide what to do when a server is back from rest or is going to rest.
+     * @return either goes to a back from rest event or a go to rest event or no event
+     */
     public Optional<Event> processServerEvent() {
         if (this.isServerRestEvent()) {
             Event serverBack = this.backFromRest();

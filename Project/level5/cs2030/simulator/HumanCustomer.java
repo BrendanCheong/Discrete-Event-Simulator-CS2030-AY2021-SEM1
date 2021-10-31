@@ -3,8 +3,17 @@ package cs2030.simulator;
 public class HumanCustomer extends Customer {
     
 
+    /**
+     * Creates a human customer.
+     * @param customerId customer id
+     * @param arrivalTime time customer arrived to restaurant
+     * @param serveTime amount of time customer needs to take to be served
+     * @param greedyProbability probability of being a greedy customer
+     * @param random the random number generator
+     * @param useRandomMachine to use rng or not use
+     */
     public HumanCustomer(int customerId, double arrivalTime, double serveTime,
-    double greedyProbability, RandomGenerator random, boolean useRandomMachine) {
+        double greedyProbability, RandomGenerator random, boolean useRandomMachine) {
 
         super(customerId, arrivalTime, 
             arrivalTime, serveTime, 
@@ -12,9 +21,20 @@ public class HumanCustomer extends Customer {
             useRandomMachine);
     }
 
+    /**
+     * Creates a human customer.
+     * <p> now with a record of the last time the customer was served </p>
+     * @param customerId customer id
+     * @param arrivalTime time customer arrived to restaurant
+     * @param time record of the last time the customer was served
+     * @param serveTime amount of time customer needs to take to be served
+     * @param greedyProbability probability of being a greedy customer
+     * @param random the random number generator
+     * @param useRandomMachine to use rng or not use
+     */
     public HumanCustomer(int customerId, double arrivalTime, double time, 
-    double serveTime, double greedyProbability, 
-    RandomGenerator random, boolean useRandomMachine) {
+        double serveTime, double greedyProbability, 
+        RandomGenerator random, boolean useRandomMachine) {
 
         super(customerId, arrivalTime, 
             time, serveTime, 

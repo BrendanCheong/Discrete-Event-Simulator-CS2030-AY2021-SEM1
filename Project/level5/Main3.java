@@ -33,10 +33,6 @@ public class Main3 {
             }
         }
 
-        // System.out.println(timeArray);
-        // System.out.println(serveTimeArray);
-        // System.out.println(restTimeArray);
-
         numberOfCustomers = timeArray.size();
         int numberOfSelfCheckoutCounters = 0;
 

@@ -23,9 +23,23 @@ public class Simulator {
     private final int numberOfSelfCheckout;
     private final RandomGenerator rng;
 
-    // constructor for level 1
-    // default queueAmount for waiting = 1
-    // default serveTimeArray = an Array of 1.000 created in Main 1
+    /**
+     * Creates a discrete event simulator, default queue size is 1 if level 1.
+     * <p> Written by Brendan Cheong 2021 for Semester 1 AY 2021-2022</p>
+     * @param numberOfServers total number of servers in the simulator
+     * @param timeArray arrival times of customers 
+     * @param numberOfCustomers total number of customers
+     * @param levelStatus current level being used
+     * @param serveTimeArray time needed to serve customers
+     * @param restTimeArray available rest times of servers
+     * @param numberOfSelfCheckout total number of self-checkout counters
+     * @param seed initial seed for rng
+     * @param arrivalRate rate of arrival for rng
+     * @param serviceRate rate of service for rng
+     * @param restingRate rate of rest for rng
+     * @param restingProb probability to rest
+     * @param greedyProb probability to be a greedy customer
+     */
     public Simulator(int numberOfServers, List<Double> timeArray, int numberOfCustomers, 
         int levelStatus, List<Double> serveTimeArray, LinkedList<Double> restTimeArray,
         int numberOfSelfCheckout, int seed, double arrivalRate, double serviceRate,
@@ -37,7 +51,23 @@ public class Simulator {
             restingProb, greedyProb);
     }
 
-    // constructor for level 2 - 5
+    /**
+     * Creates a discrete event simulator with all parameters.
+     * @param numberOfServers total number of servers in the simulator
+     * @param timeArray arrival times of customers 
+     * @param numberOfCustomers total number of customers
+     * @param queueAmount total customer queue size for all servers
+     * @param levelStatus current level being used
+     * @param serveTimeArray time needed to serve customers
+     * @param restTimeArray available rest times of servers
+     * @param numberOfSelfCheckout total number of self-checkout counters
+     * @param seed initial seed for rng
+     * @param arrivalRate rate of arrival for rng
+     * @param serviceRate rate of service for rng
+     * @param restingRate rate of rest for rng
+     * @param restingProb probability to rest
+     * @param greedyProb probability to be a greedy customer
+     */
     public Simulator(int numberOfServers, List<Double> timeArray, int numberOfCustomers, 
         int levelStatus, int queueAmount, List<Double> serveTimeArray, 
         LinkedList<Double> restTimeArray, int numberOfSelfCheckout,
@@ -59,10 +89,15 @@ public class Simulator {
         createArriveEvents(numberOfCustomers, greedyProb);
     }
 
+    /**
+     * Starts the simulation of the Discrete Event Simulator.
+     * <p> polls the event queue until no events are left </p>
+     * <p> each event will mutate, aka move on to the next event and be added back
+     * into the queue </p>
+     * <p> finally, each event statistics is added into the statistics class for 
+     * calculation of statistics </p>
+     */
     public void simulate() {
-        // first create all ArrivalEvents
-        // then create all servers
-        // hopefully the events will be referencing the same list of servers
         List<Integer> numberOfServedCustomers = new ArrayList<>();
         List<Integer> numberOfLeftCustomers = new ArrayList<>();
         List<Double> totalWaitingTime = new ArrayList<>();
@@ -96,6 +131,14 @@ public class Simulator {
         System.out.println(stats);
     }
 
+    /**
+     * Creates all normal servers and self checkout servers.
+     * @param numberOfServers number of servers to be created
+     * @param queueAmount the queue size of each server
+     * @param selfCheckOut the number of self-checkout counters
+     * @param restingProb probability to rest
+     * @param rng the RandomNumber generator
+     */
     public void createServers(int numberOfServers, int queueAmount, int selfCheckOut,
         double restingProb, RandomGenerator rng) {
         boolean useRandomMachine = this.levelStatus == RANDOMNESS_LEVEL;
@@ -116,6 +159,11 @@ public class Simulator {
             });
     }
 
+    /**
+     * Creates all arrival events together with greedy or human customers.
+     * @param numberOfCustomers total number of customers to be created
+     * @param greedyProb probability to be a greedy customer
+     */
     public void createArriveEvents(int numberOfCustomers, double greedyProb) {
         boolean useRandomMachine = this.levelStatus == RANDOMNESS_LEVEL;
         double timeHolder = 0.000;
@@ -152,6 +200,11 @@ public class Simulator {
         }
     }
 
+    /**
+     * Checks whether a greedy customer needs to created based on probability.
+     * @param greedyProbability probability a greedy customer needs to made
+     * @return true -> make a greedy customer, false -> make a human customer
+     */
     public boolean canCreateGreedyCustomer(double greedyProbability) {
         double probability = this.rng.genCustomerType();
         return probability < greedyProbability;
