@@ -75,7 +75,7 @@ public class Simulator {
         double restingRate, double restingProb, double greedyProb) {
 
         this.eventQueue = new PriorityQueue<>(new EventComparator());
-        this.serverList = new ArrayList<>(100);
+        this.serverList = new ArrayList<>();
         this.numberOfServers = numberOfServers;
         this.timeArray = timeArray;
         this.numberOfCustomers = numberOfCustomers;

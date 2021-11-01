@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Main2 {
+
+    private static final int levelStatus = 2;
+    
     /**
      * Takes in number of servers and arrival times to simulate restaurant.
      * <p>simulates the entire restaurant with simulate method</p>
      * @param args takes in an array of arrival times and number of servers
      **/
     public static void main(String[] args) {
-        int levelStatus = 2;
+        
         Scanner sc = new Scanner(System.in);
         List<Double> timeArray = new ArrayList<>();
         List<Double> serveTimeArray = new ArrayList<>();

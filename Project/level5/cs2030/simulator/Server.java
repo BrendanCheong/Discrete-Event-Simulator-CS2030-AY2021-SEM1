@@ -33,10 +33,10 @@ public class Server {
 
         this.id = id;
         this.queue = new LinkedList<>();
-        this.currentCustomer = new ArrayList<>(1000);
+        this.currentCustomer = new ArrayList<>();
         this.queueAmount = queueAmount;
-        this.canServeAt = new ArrayList<>(1000);
-        this.restingState = new ArrayList<>(1000);
+        this.canServeAt = new ArrayList<>();
+        this.restingState = new ArrayList<>();
         this.restingProb = restingProb;
         this.rng = rng;
         this.useRandomMachine = useRandomMachine;

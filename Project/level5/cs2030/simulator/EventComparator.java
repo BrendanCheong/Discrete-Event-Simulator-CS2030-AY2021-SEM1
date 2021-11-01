@@ -3,6 +3,8 @@ package cs2030.simulator;
 import java.util.Comparator;
 
 public class EventComparator implements Comparator<Event> {
+
+    private static final double smallestNumber = 1e-9;
     
     @Override
     public int compare(Event event1, Event event2) {
@@ -12,7 +14,7 @@ public class EventComparator implements Comparator<Event> {
         Customer event2Customer = event2.getCustomerNotNull();
 
         // check for tie-breaker
-        if (Math.abs((event1Time - event2Time) / event1Time) < 1e-9) {
+        if (Math.abs((event1Time - event2Time) / event1Time) < smallestNumber) {
             if (event2.isServerEvent()) {
                 return 1;
             } else if (event1.isServerEvent()) {
