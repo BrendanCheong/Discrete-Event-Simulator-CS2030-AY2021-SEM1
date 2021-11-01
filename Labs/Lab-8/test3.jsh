@@ -1,3 +1,6 @@
+/open Logger.java
+/open Pair.java
+
 Logger<Integer> five = Logger.<Integer>of(5)
 five.flatMap(x -> Logger.of(x + 1))
 five.map(x -> x + 2).map(x -> x * 10)

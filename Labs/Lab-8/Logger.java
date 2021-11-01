@@ -17,6 +17,10 @@ public class Logger<T> {
         this.supp = supp;
     }
 
+    public Logger(Supplier<Pair<T, List<String>>> supper) {
+        this.supp = supper;
+    }
+
     public static <T> Logger<T> of(T input) {
         Optional<T> value = Optional.<T>ofNullable(input);
         try {
@@ -36,13 +40,38 @@ public class Logger<T> {
     }
 
     public <U> Logger<U> map(Function<? super T, ? extends U> mapper) {
-        Supplier<Logger<U>> supper = () -> { // Supplier <Pair<T, List<String>>> supp
-            U value = mapper.apply(this.supp.get().getKey()); // get Key is to get K from Pair<K,V>
-            List<String> newLog = new ArrayList<>(this.supp.get().getValue()); // get Value is for V in Pair<K,V>
+        Supplier<Pair<U,List<String>>> supper = () -> { 
+            U value = mapper.apply(this.supp.get().getKey()); 
+            List<String> newLog = new ArrayList<>(this.supp.get().getValue());
             newLog.add("" + value);
-            return new Logger<U>(value, newLog);
+            return new Pair<U, List<String>>(value, newLog);
         };
-        return supper.get();
+        return new Logger<U>(supper);
+    }
+
+    public <U> Logger<U> flatMap(Function<? super T, ? extends Logger<? extends U>> flatMapper) {
+        Supplier<Pair<U, List<String>>> supper = () -> {
+            Logger<? extends U> newLogger = flatMapper.apply(this.supp.get().getKey()); // thats one blow
+            // I need to merge the newLogger list with the current list
+            // only merge when the size of the current list is more than 1
+            List<String> newLoggerList = newLogger.supp.get().getValue();
+            int newLoggerEndIndex = newLoggerList.size() - 1;
+
+            @SuppressWarnings("unchecked")
+            U newKey = (U) newLoggerList.get(newLoggerEndIndex);
+            
+            System.out.print("New logger value: " + newKey + "\n");
+            List<String> newLog = new ArrayList<>(this.supp.get().getValue());
+            System.out.print("Old logger list: " + newLog + "\n");
+            IntStream
+                .range(0, newLoggerList.size())
+                .filter((x) -> !newLog.contains(newLoggerList.get(x)))
+                .mapToObj((x) -> newLoggerList.get(x))
+                .forEach((x) -> newLog.add("" + x));
+            System.out.print("New Created Logger List: " + newLog + "\n");
+            return new Pair<U, List<String>>(newKey, newLog);
+        };
+        return new Logger<U>(supper);
     }
 
     public <U> Logger<U> testSubject(Logger<U> trueLogger, Logger<U> falseLogger) {
@@ -54,20 +83,25 @@ public class Logger<T> {
 
     public String getHistory() {
         List<String> currentHistory = this.supp.get().getValue();
+        int lastIndex = currentHistory.size() - 1;
+
+        String currentLog = String.format("Logger[%s]", 
+            currentHistory.get(lastIndex));
+
         String answer = IntStream
             .range(1, currentHistory.size())
             .mapToObj((x) -> new Pair<String, String>(currentHistory.get(x - 1),
                 currentHistory.get(x)).toString())
             .reduce("", (x, y) -> x + y);
-        return answer;
+        
+        return currentLog + answer;
     }
 
 
     @Override
     public String toString() {
-        int size = this.supp.get().getValue().size();
-        String currentLog = String.format("Logger[%s]", this.supp.get().getKey());
-        return  size > 1 ? currentLog + getHistory() : currentLog;
+        Supplier<String> historyLog = () -> getHistory();
+        return historyLog.get();
     }
 
 }
