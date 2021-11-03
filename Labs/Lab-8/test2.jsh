@@ -14,6 +14,7 @@ Logger.<String>of("hello").map(f)
 Function<String, Integer> g = x -> x.length();
 Logger<Number> lognum = Logger.<String>of("hello").map(g)
 
+// new Test Case
 five.map((x) -> x + 1).
     testSubject(five.map(x -> { System.out.println("add 1"); return x + 1; }),
     five.map(x -> { System.out.println("sub 1"); return x - 1; }))

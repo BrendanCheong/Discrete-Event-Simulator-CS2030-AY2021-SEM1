@@ -5,18 +5,18 @@ import java.util.Optional;
 
 public class Lazy<T> {
 
-    private T v;
+    private Optional<T> v;
     private Supplier<? extends T> s;
     private boolean evaluated;
 
     private Lazy(T v) {
-        this.v = v;
+        this.v = Optional.<T>ofNullable(v);
         s = () -> v;
         evaluated = true;   
     }
 
     private Lazy(Supplier<? extends T> s) {
-        this.v = null;
+        this.v = Optional.empty();
         this.s = s;
         evaluated = false;
     }
@@ -40,16 +40,16 @@ public class Lazy<T> {
     public Optional<T> get() {
         if (!evaluated) {
             evaluated = true;
-            v = s.get();
-            s = () -> v;
+            v = Optional.<T>of(s.get());
+            s = () -> v.get();
         }
-        return Optional.ofNullable(v);  
+        return v;  
     }
 
     @Override
     public String toString() {
         if (evaluated) {
-            if (v == null) {
+            if (v.isEmpty()) {
                 return "null";
             } else {
                 return v.toString();
