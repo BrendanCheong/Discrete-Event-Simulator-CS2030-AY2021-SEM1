@@ -1,5 +1,10 @@
 package cs2030.simulator;
 
+/**
+ * Greedy customer finds the server with the smallest queue size and is the most free.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class GreedyCustomer extends Customer {
     
     /**

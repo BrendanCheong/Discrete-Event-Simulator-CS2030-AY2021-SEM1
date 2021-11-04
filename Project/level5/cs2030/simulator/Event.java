@@ -5,6 +5,11 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.NoSuchElementException;
 
+/**
+ * Event class has serve, wait, leave, done, server rest, and server return from rest.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class Event {
 
     private final Optional<Customer> customer;

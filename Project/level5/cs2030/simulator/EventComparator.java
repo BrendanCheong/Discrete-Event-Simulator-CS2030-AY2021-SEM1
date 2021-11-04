@@ -2,6 +2,11 @@ package cs2030.simulator;
 
 import java.util.Comparator;
 
+/**
+ * Compares between events to decide which event to mutate next.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class EventComparator implements Comparator<Event> {
 
     private static final double smallestNumber = 1e-9;

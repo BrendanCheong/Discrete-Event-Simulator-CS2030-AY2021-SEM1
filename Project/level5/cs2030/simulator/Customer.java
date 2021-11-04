@@ -1,5 +1,10 @@
 package cs2030.simulator;
 
+/**
+ * Customer class will be served by servers, can have human customers or greedy customers.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public abstract class Customer implements Comparable<Customer> {
     
     private final int customerId;

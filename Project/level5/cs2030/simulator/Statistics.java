@@ -2,6 +2,12 @@ package cs2030.simulator;
 
 import java.util.List;
 
+/**
+ * Statistics will calculate the average waiting time, total served customers
+ * and total customers that left.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class Statistics {
     
     private final List<Integer> numberOfServedCustomers;

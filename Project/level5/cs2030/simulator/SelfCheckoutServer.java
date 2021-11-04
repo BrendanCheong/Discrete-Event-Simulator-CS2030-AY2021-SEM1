@@ -4,6 +4,11 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.NoSuchElementException;
 
+/**
+ * Self Checkout Counters will are just servers that do not rest.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class SelfCheckoutServer extends Server {
 
     private static final LinkedList<Customer> SELF_CHECKOUT_QUEUE = new LinkedList<>();

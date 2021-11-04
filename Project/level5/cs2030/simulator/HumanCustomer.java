@@ -1,8 +1,12 @@
 package cs2030.simulator;
 
+/**
+ * Human Customer is a just a normal customer, it will find the server with the lowest id.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class HumanCustomer extends Customer {
     
-
     /**
      * Creates a human customer.
      * @param customerId customer id

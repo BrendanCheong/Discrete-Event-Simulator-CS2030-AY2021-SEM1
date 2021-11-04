@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.NoSuchElementException;
 
+/**
+ * Server class will serve the customer and also rest.
+ * @author Brendan Cheong
+ * @version CS2030 AY 2021-2022 Sem 1
+ */
 public class Server {
     
     private final int id;
