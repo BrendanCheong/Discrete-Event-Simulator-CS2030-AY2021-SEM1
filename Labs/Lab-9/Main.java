@@ -46,6 +46,7 @@ public class Main {
         List<CompletableFuture<?>> iterableFutures = new ArrayList<>(Arrays.asList(joinedAnswers));
         IntStream
             .range(0, iterableFutures.size())
+            .parallel()
             .forEachOrdered((index) -> {
                 CompletableFuture<?> description = iterableFutures.get(index);
                 description
