@@ -1,3 +1,6 @@
+/open MySetImp.java
+/open MySet.java
+
 MySet<Integer> mySet = new MySetImpl<>();
 mySet.add(1);
 mySet.add(2);

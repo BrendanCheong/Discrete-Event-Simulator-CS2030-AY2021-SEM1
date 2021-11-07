@@ -1,3 +1,6 @@
+/open MySetImp.java
+/open MySet.java
+
 MySet<Integer> mySet = MySetImpl.<Integer>of(1,2,3,4,5,6);
 mySet;
 mySet.duplicate(3).size() == 18;
