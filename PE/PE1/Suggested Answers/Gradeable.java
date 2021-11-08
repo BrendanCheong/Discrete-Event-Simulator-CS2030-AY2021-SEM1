@@ -1,0 +1,3 @@
+interface Gradeable {
+    int mark();
+}
