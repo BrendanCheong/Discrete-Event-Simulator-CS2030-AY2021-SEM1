@@ -1,5 +1,6 @@
-/open MySetImp.java
+/open MySetImpl.java
 /open MySet.java
+/open DuplicateNotAllowedException.java
 
 MySet<Integer> mySet = new MySetImpl<>();
 mySet.size();

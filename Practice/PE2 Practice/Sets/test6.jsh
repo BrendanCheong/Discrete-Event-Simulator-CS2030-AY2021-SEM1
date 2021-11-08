@@ -1,5 +1,6 @@
-/open MySetImp.java
+/open MySetImpl.java
 /open MySet.java
+/open DuplicateNotAllowedException.java
 
 MySet<Integer> mySet = MySetImpl.<Integer>of(1,2,3,4,5,6);
 MySet<Integer> otherSet = MySetImpl.<Integer>of(6,2,7,4,5,8);
