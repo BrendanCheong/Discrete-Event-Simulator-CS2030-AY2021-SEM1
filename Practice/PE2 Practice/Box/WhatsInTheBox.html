@@ -1,0 +1,361 @@
+<h1>Box</h1>
+<h2>Topic Coverage</h2>
+<ul>
+    <li>Static members</li>
+    <li>Interface</li>
+    <li>Generics</li>
+    <li>Wildcards</li>
+    <li>@SuppressWarnings</li>
+    <li>CS2030 Java Style Guide</li>
+</ul>
+<h2>Problem Description</h2>
+<p>In this lab, we are going to extend the <code>Box</code> class with a few more functionalities.  Recall that the <code>Box</code> class we built during Lecture 5 is a generic class that can be used to store an item of any reference type.
+</p>
+<table border="1" style="width:600px;" cellpadding=10><tr><td>
+            <h2>Level 1</h2>
+            <h2>A Box</h2>
+            <p>
+            Build the <code>Box</code> class with the following methods:
+            <ul>
+                <li>A static <code>of</code> method that allows a box to be created with a given object.  If <code>null</code> is passed into <code>of</code>, then a <code>null</code> should be returned.</li>
+                <li>Override the <code>equals</code> method so that we can compare if two boxes are the same.  Two boxes are the same if the content of the box equals to each other, as decided by their respective <code>equals</code> method.
+            </ul>
+            </p>
+            <p>
+            When you implement <code>equals</code>, you need to cast an <code>Object</code> object to a <code>Box&lt;T&gt;</code> object so that you can compare the content.  Here, you will encounter a warning from the compiler about unchecked conversion.  You should consider such a warning carefully and check if your type-casting makes sense.  If you have already checked that the <code>Object</code> object you cast has a run-time type of <code>Box</code>, then you can use the annotation
+            </p>
+            <pre>
+    @SuppressWarnings("unchecked")
+            </pre>
+            <p>
+            to suppress this warning.  In general, <i>you should not suppress warnings unless you know what you are doing.</i>
+            </p>
+            </p>
+
+            <p>
+            <table border=1 width=100% cellpadding=10><tr><td>
+                        <pre>
+<b>jshell&gt; Box.of(4)</b>
+$.. ==&gt; [4]
+<b>jshell&gt; Box.of(4).equals(Box.of(4))</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.of(4).equals(4)</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of(Box.of(0)).equals(Box.of(0))</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of(Box.of(0)).equals(Box.of(Box.of(0)))</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.of("string")</b>
+$.. ==&gt; [string]
+<b>jshell&gt; Box.of("string").equals(Box.of(4))</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of("string").equals(Box.of("null"))</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of("delights").equals(Box.of("chocolates"))</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of(null)</b>
+$.. ==&gt; null
+<b>jshell&gt; /exit</b>
+
+                        </pre>
+            </table>
+            <p>
+            Check the format correctness of the output by running the following on the command line:
+            <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level1.jsh
+            </pre>
+            <p>
+            Check your styling by issuing the following
+            </p>
+            <pre>
+$ checkstyle *.java
+            </pre>
+                    </td></tr>
+                    <tr><td>
+                            <h2>Level 2</h2>
+                            <h2>An Empty Box</h2>
+                            <p>
+                            The <code>of</code> method returns a <code>null</code> if it is given a <code>null</code>.  An alternative (some might say, cleaner) design is to make our factory method returns an empty box instead if we try to create a box of <code>null</code>.
+                            </p>
+                            <p>
+                            Add a method in <code>Box</code> called <code>empty()</code> that creates and returns an empty box, i.e., a box with a <code>null</code> item stored in it.
+                            </p>
+                            <p>
+                            Since empty boxes are likely common, we want to <i>cache</i> the empty box, that is, create one as a private final static member called <code>EMPTY_BOX</code>, and whenever we need to return an empty box, <code>EMPTY_BOX</code> is returned.
+                            </p>
+                            <p>
+                            What should the type of <code>EMPTY_BOX</code> be?  The type should be general enough to hold a box of any type (<code>Box&lt;Cruise&gt;</code>, <code>Box&lt;Circle&gt;</code>, etc).  <code>EMPTY_BOX</code> should, therefore, be assigned the most general generic <code>Box</code> type.  Hint: It is not <code>Box&lt;Object&gt;</code>.
+                            </p>
+                            <p>
+                            Your method <code>empty()</code> should do nothing more than to type-cast <code>EMPTY_BOX</code> to the right type (i.e., to <code>Box&lt;T&gt;</code>) before returning, to ensure that type consistency.
+                            </p>
+                            <p>
+                            Note that here, we are casting a more general generic type to a more specific generic type, so the compiler gives us an unchecked conversion warning.  Again, you can use the annotation
+                            </p>
+                            <pre>
+    @SuppressWarnings("unchecked")
+                            </pre>
+                            <p>
+                            to suppress this warning.  Let me repeat again: in general, <i>you should not suppress warnings unless you know what you are doing.</i>  Here, we are sure we can type-cast since an empty box can be treated as a box of any type.
+                            </p>
+                            <p>
+                            Add a boolean method <code>isPresent</code> that returns <code>true</code> if the box contains something; <code>false</code> if the box is empty.
+                            </p>
+                            <p>
+                            Finally, add a static factory method called <code>ofNullable</code>, which behaves just like <code>of</code> if the input is non-null, and returns an empty box if the input is null.
+                            </p>
+                            <table border=1 width=100% cellpadding=10><tr><td>
+                                        <pre>
+<b>jshell&gt; Box.ofNullable(4)</b>
+$.. ==&gt; [4]
+<b>jshell&gt; Box.ofNullable("string")</b>
+$.. ==&gt; [string]
+<b>jshell&gt; Box.ofNullable(null)</b>
+$.. ==&gt; []
+<b>jshell&gt; Box.empty() == Box.empty()</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.ofNullable(null) == Box.empty()</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.ofNullable(null).equals(Box.empty())</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.ofNullable(null).equals(Box.of(null))</b>
+$.. ==&gt; false
+<b>jshell&gt; </b>
+<b>jshell&gt; Box.ofNullable("string").isPresent()</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.ofNullable(null).isPresent()</b>
+$.. ==&gt; false
+<b>jshell&gt; /exit</b>
+
+                                        </pre>
+                            </table>
+                            <p>
+                            Check the format correctness of the output by running the following on the command line:
+                            <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level2.jsh
+                            </pre>
+                            Check your styling by issuing the following
+                            <pre>
+$ checkstyle *.java
+                            </pre>
+                            </p>
+                                    </td></tr>
+                                    <tr><td>
+                                            <h2>Level 3</h2>
+                                            <h2>Checking the Content of the Box</h2>
+                                            <p>
+                                            So far, we can only keep things inside our <code>Box</code>, which is not very exciting.  In the rest of the levels, we will expand <code>Box</code> to support operations on the item inside.
+                                            </p>
+                                            <p>
+                                            Let's start by writing a generic interface called <code>BooleanCondition&lt;T&gt;</code> with a single abstract boolean method <code>test</code>.  The method <code>test</code> should take a single argument of type <code>T</code>.
+                                            </p>
+                                            <p>
+                                            Now, one can create a variety of classes by implementing this interface.  By implementing the method <code>test</code> differently, we can create different conditions and check if the item contained in the box satisfies a given condition or not.
+                                            </p>
+                                            <p>
+                                            Create a method <code>filter</code> in <code>Box</code> that takes in a <code>BooleanCondition</code> as a parameter.  The method <code>filter</code> should return an empty box if the item in the box failed the test (i.e., the call to <code>test</code> returns <code>false</code>).  Otherwise, <code>filter</code> leaves the box untouched and returns the box as it is.  Calling <code>filter</code> on an empty box just returns an empty box.
+                                            </p>
+                                            <table border=1 width=100% cellpadding=10><tr><td>
+                                                        <pre>
+<b>jshell&gt; class AlwaysTrue&lt;T&gt; implements BooleanCondition&lt;T&gt; {</b>
+<b>   ...&gt;   public boolean test(T t) { return true; } </b>
+<b>   ...&gt; }</b>
+<b>jshell&gt; class AlwaysFalse&lt;T&gt; implements BooleanCondition&lt;T&gt; {</b>
+<b>   ...&gt;   public boolean test(T t) { return false; } </b>
+<b>   ...&gt; }</b>
+<b>jshell&gt; </b>
+<b>jshell&gt; Box.ofNullable(4).filter(new AlwaysTrue&lt;&gt;())</b>
+$.. ==&gt; [4]
+<b>jshell&gt; Box.ofNullable(null).filter(new AlwaysTrue&lt;&gt;())</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+<b>jshell&gt; Box.ofNullable("string").filter(new AlwaysFalse&lt;&gt;())</b>
+$.. ==&gt; []
+<b>jshell&gt; Box.empty().filter(new AlwaysFalse&lt;&gt;())</b>
+$.. ==&gt; []
+<b>jshell&gt; /exit</b>
+
+                                                        </pre>
+                                            </table>
+                                            <p>
+                                            Check the format correctness of the output by running the following on the command line:
+                                            <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level3.jsh
+                                            </pre>
+                                            Check your styling by issuing the following
+                                            <pre>
+$ checkstyle *.java
+                                            </pre>
+                                            </p>
+                                                    </td></tr>
+                                                    <tr><td>
+                                                            <h2>Level 4</h2>
+                                                            <h2>Implement Your Own Conditions</h2>
+                                                            <p>
+                                                            The test cases above show you how you could create a class that implements a <code>BooleanCondition</code>.  Now you should implement your own.
+                                                            </p>
+                                                            <p>
+                                                            Create a class called <code>DivisibleBy</code> that implements <code>BooleanCondition</code> on <code>Integer</code> that checks if a given integer is divisible by another integer.  The <code>test</code> method should return <code>true</code> if it is divisible; return <code>false</code> otherwise.
+                                                            </p>
+                                                            <p>
+                                                            Create another class called <code>LongerThan</code> that implements <code>BooleanCondition</code> on <code>String</code> that checks if a given string is longer than a given limit.  The <code>test</code> method should return <code>true</code> if it is longer; return <code>false</code> otherwise.
+                                                            </p>
+                                                            <table border=1 width=100% cellpadding=10><tr><td>
+                                                                        <pre>
+<b>jshell&gt; new DivisibleBy(5).test(4)</b>
+$.. ==&gt; false
+<b>jshell&gt; new DivisibleBy(5).test(10)</b>
+$.. ==&gt; true
+<b>jshell&gt; Box.of(10).filter(new DivisibleBy(2))</b>
+$.. ==&gt; [10]
+<b>jshell&gt; Box.of(3).filter(new DivisibleBy(2))</b>
+$.. ==&gt; []
+<b>jshell&gt; Box.of("hello").filter(new DivisibleBy(10))</b>
+|  Error:
+|  incompatible types: DivisibleBy cannot be converted to BooleanCondition&lt;? super java.lang.String&gt;
+|  Box.of("hello").filter(new DivisibleBy(10))
+|                         ^-----------------^
+<b>jshell&gt; Box&lt;Integer&gt; empty = Box.empty()</b>
+<b>jshell&gt; empty.filter(new DivisibleBy(10))</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+<b>jshell&gt; new LongerThan(6).test("123456")</b>
+$.. ==&gt; false
+<b>jshell&gt; new LongerThan(3).test("")</b>
+$.. ==&gt; false
+<b>jshell&gt; Box.of("chocolates").filter(new LongerThan(20))</b>
+$.. ==&gt; []
+<b>jshell&gt; Box.of("string").filter(new LongerThan(4))</b>
+$.. ==&gt; [string]
+<b>jshell&gt; Box&lt;String&gt; empty = Box.empty()</b>
+<b>jshell&gt; empty.filter(new LongerThan(10))</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+
+                                                                        </pre>
+                                                                    </td></tr></table>
+                                                                    <p>
+                                                                    Check the format correctness of the output by running the following on the command line:
+                                                                    <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level4.jsh
+                                                                    </pre>
+                                                                    Check your styling by issuing the following
+                                                                    <pre>
+$ checkstyle *.java
+                                                                    </pre>
+                                                                    </p>
+                                                        </td></tr>
+                                                        <tr><td>
+                                                                <h2>Level 5</h2>
+                                                                <h2>Transforming a Box</h2>
+                                                                <p>
+                                                                Now, we are going to write an interface (along with its implementations) and a method in Box that allows a box to be transformed into another box, possibly containing a different type.
+                                                                </p>
+                                                                <p>
+                                                                First, create an interface called <code>Transformer&lt;T,U&gt;</code> with an abstract method called <code>transform</code> that takes in an argument of generic type <code>T</code> and returns a value of generic type <code>U</code>.  (This might be the first time you see a generic type with more than one type parameters, but not to worry, it behaves the same, just more type parameters!)
+                                                                </p>
+                                                                <p>
+                                                                Write a method called <code>map</code> in the class <code>Box</code> that takes in a <code>Transformer</code>, and use the given <code>Transformer</code> to transform the box (and the value inside) into another box of type <code>Box&lt;U&gt;</code>.  Calling <code>map</code> on an empty box should just return an empty box.
+                                                                </p>
+                                                                <p>
+                                                                In addition, implement your own <code>Transformer</code> in a class called <code>LastDigitsOfHashCode</code> to transform the item of the box into an integer, the value of which is the last <i>k</i> digits of the hash code of the content of the original box.  The value <i>k</i> is passed in through the constructor of the <code>LastDigitsOfHashCode</code> object.
+                                                                </p>
+                                                                <p>
+                                                                If you find yourself in a situation where <code>map</code> needs to accept objects of different types, consider using bounded wildcards!
+                                                                </p>
+                                                                <table border=1 width=100% cellpadding=10><tr><td>
+                                                                            <pre>
+<b>jshell&gt; class AddOne implements Transformer&lt;Integer,Integer&gt; {</b>
+<b>   ...&gt;   public Integer transform(Integer t) { return t + 1; } </b>
+<b>   ...&gt; }</b>
+<b>jshell&gt; class StringLength implements Transformer&lt;String,Integer&gt; {</b>
+<b>   ...&gt;   public Integer transform(String t) { return t.length(); }</b>
+<b>   ...&gt; }</b>
+<b>jshell&gt; </b>
+<b>jshell&gt; Box.of(4).map(new AddOne())</b>
+$.. ==&gt; [5]
+<b>jshell&gt; Box&lt;Integer&gt; empty = Box.empty()</b>
+<b>jshell&gt; empty.map(new AddOne())</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+<b>jshell&gt; Box.of("string").map(new StringLength())</b>
+$.. ==&gt; [6]
+<b>jshell&gt; Box.of("string").map(new StringLength()).map(new AddOne())</b>
+$.. ==&gt; [7]
+<b>jshell&gt; Box.of("string").map(new StringLength()).filter(new DivisibleBy(5)).map(new AddOne())</b>
+$.. ==&gt; []
+<b>jshell&gt; Box.of("chocolates").map(new StringLength()).filter(new DivisibleBy(5)).map(new AddOne())</b>
+$.. ==&gt; [11]
+<b>jshell&gt; </b>
+<b>jshell&gt; Box&lt;String&gt; empty = Box.empty()</b>
+<b>jshell&gt; empty.map(new StringLength())</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+<b>jshell&gt; class AlwaysNull implements Transformer&lt;Integer,Object&gt; {</b>
+<b>   ...&gt;   public Object transform(Integer t) { return null; }</b>
+<b>   ...&gt; }</b>
+<b>jshell&gt; Box.of(4).map(new AlwaysNull())</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+<b>jshell&gt; new LastDigitsOfHashCode(4).transform("string")</b>
+$.. ==&gt; 5903
+<b>jshell&gt; new LastDigitsOfHashCode(4).transform(123456)</b>
+$.. ==&gt; 3456
+<b>jshell&gt; Box.of("string").map(new LastDigitsOfHashCode(2))</b>
+$.. ==&gt; [3]
+<b>jshell&gt; Box.of(123456).map(new LastDigitsOfHashCode(5))</b>
+$.. ==&gt; [23456]
+<b>jshell&gt; </b>
+
+                                                                            </pre>
+                                                                        </td></tr></table>
+                                                                        <p>
+                                                                        Check the format correctness of the output by running the following on the command line:
+                                                                        <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level5.jsh
+                                                                        </pre>
+                                                                        Check your styling by issuing the following
+                                                                        <pre>
+$ checkstyle *.java
+                                                                        </pre>
+                                                                        </p>
+                                                            </td></tr>
+                                                            <tr><td>
+                                                                    <h2>Level 6</h2>
+                                                                    <h2>Box in a Box</h2>
+                                                                    <p>
+                                                                    The <code>Transformer</code> interface allows us to transform the content of the box from one type into any other type, including a box!   You have seen examples above where we have a box inside a box: <code>Box.of(Box.of(0))</code>.
+                                                                    </p>
+                                                                    <p>
+                                                                    Now, implement your own <code>Transformer</code> in a class called <code>BoxIt&lt;T&gt;</code> to transform an item into a box containing the item.  The corresponding type <code>T</code> is transformed into <code>Box&lt;T&gt;</code>.  This transformer, when invoked with <code>map</code>, results in a new box within the box.
+                                                                    </p>
+                                                                    <table border=1 width=100% cellpadding=10><tr><td>
+                                                                                <pre>
+<b>jshell&gt; Box.of(4).map(new BoxIt&lt;&gt;())</b>
+$.. ==&gt; [[4]]
+<b>jshell&gt; Box.of(Box.of(5)).map(new BoxIt&lt;&gt;())</b>
+$.. ==&gt; [[[5]]]
+<b>jshell&gt; Box.ofNullable(null).map(new BoxIt&lt;&gt;())</b>
+$.. ==&gt; []
+<b>jshell&gt; </b>
+
+                                                                                </pre>
+                                                                            </td></tr></table>
+                                                                            <p>
+                                                                            Check the format correctness of the output by running the following on the command line:
+                                                                            <pre>
+$ javac *.java
+$ jshell -q &lt;list of java files in dependency order&gt; < level6.jsh
+                                                                            </pre>
+                                                                            Check your styling by issuing the following
+                                                                            <pre>
+$ checkstyle *.java
+                                                                            </pre>
+                                                                            </p>
+                                                                </td></tr>
+</table>
