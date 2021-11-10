@@ -1,62 +1,87 @@
-UnaryOperator<List<Thing>> takeSword = list -> {
-    for (Thing thing: list) {
-        if (thing instanceof Sword) {
-            Sword sword = (Sword)thing;
-            if (!sword.isEquipped()) {
-                System.out.println("--> You have taken sword.");
-                Sword newSword = sword.equipSword();
-                return list.stream()
-                    .map(x -> x == thing ? newSword : x)
-                    .collect(Collectors.toList());
-            } else {
-                System.out.println("--> You already have sword.");
-                return list;
-            }
-        }
-    } 
-
-    System.out.println("--> There is no sword.");
-    return list;
-};
-
-UnaryOperator<List<Thing>> killTroll = list -> {
-    boolean swordEquipped = false;
-    boolean hasTroll = false;
-    for (Thing thing : list) {
-        if (thing instanceof Troll) {
-            hasTroll = true;
-        } else if (thing instanceof Sword) {
-            swordEquipped = ((Sword)thing).isEquipped();
+Function<? super Room, ? extends Room> takeSword = (room) -> {
+    List<Item> currItemList = room.getItems();
+    boolean isThereSword = false;
+    Optional<Sword> theSword = Optional.empty();
+    for (Item items : currItemList) {
+        if (items.isItem("Sword")) {
+            isThereSword = true;
+            theSword = Optional.<Sword>of((Sword) items);
+            break;
         }
     }
 
-    if (hasTroll && swordEquipped) {
+    if (isThereSword) {
+        Sword chosenSword = theSword
+            .map((x) -> x)
+            .orElseThrow();
+        if (chosenSword.checkIfPresent()) {
+            System.out.println("--> you have already taken sword.");
+        } else {
+            System.out.println("--> you have taken sword.");
+            Sword newSword = (Sword) chosenSword.equipSword();
+            // update the current room list
+            List<Item> newItemList = currItemList
+                .stream()
+                .map((x) -> x.isItem("Sword")
+                    ? newSword
+                    : x)
+                .collect(Collectors.toCollection(() -> new ArrayList<>()));
+            return new Room(room.getName(), newItemList, room.getPastRoom());
+        }
+    } else {
+        System.out.println("--> There is no sword.");
+    }
+
+    return room;
+}
+
+Function<? super Room, ? extends Room> killTroll = (room) -> {
+    List<Item> currItemList = room.getItems();
+    boolean isThereSword = false;
+    boolean isThereTroll = false;
+    for (Item item : currItemList) {
+        if (item.isItem("Sword")) {
+            isThereSword = ((Sword)item).checkIfPresent();
+        } else if (item.isItem("Troll")) {
+            isThereTroll = true;
+        }
+    }
+
+    if (isThereTroll && isThereSword) {
         System.out.println("--> Troll is killed.");
-        return list.stream()
-            .filter(x -> !(x instanceof Troll))
-            .collect(Collectors.toList());
-    } else if (!hasTroll) {
+        // after killing troll, get rid of troll from current list
+        List<Item> newItemList = currItemList
+            .stream()
+            .filter((x) -> !x.isItem("Troll"))
+            .collect(Collectors.toCollection(() -> new ArrayList<>()));
+        return new Room(room.getName(), newItemList, room.getPastRoom());
+    } else if (!isThereTroll) {
         System.out.println("--> There is no troll");
-    } else if (!swordEquipped) {
+    } else if (!isThereSword) {
         System.out.println("--> You have no sword.");
     }
+    return room;
+}
 
-    return list;
-};
-
-UnaryOperator<List<Thing>> dropSword = list -> {
-    for (Thing thing: list) {
-        if (thing instanceof Sword) {
-            Sword sword = (Sword)thing;
-            if (sword.isEquipped()) {
+Function<? super Room, ? extends Room> dropSword = (room) -> {
+    List<Item> currItemList = room.getItems();
+    for (Item items : currItemList) {
+        if (items.isItem("Sword")) {
+            Sword chosenSword = (Sword) items;
+            if (chosenSword.checkIfPresent()) {
                 System.out.println("--> You have dropped sword.");
-                Sword newSword = sword.unequipSword();
-                return list.stream()
-                    .map(x -> x == thing ? newSword : x)
-                    .collect(Collectors.toList());
-            } 
+                Sword newSword = (Sword) chosenSword.removeSword();
+                // update the current room list
+                List<Item> newItemList = currItemList
+                    .stream()
+                    .map((x) -> x.isItem("Sword")
+                        ? newSword
+                        : x)
+                    .collect(Collectors.toCollection(() -> new ArrayList<>()));
+                return new Room(room.getName(), newItemList, room.getPastRoom());
+            }
         }
     }
 
-    return list;
-};
+    return room;
+}

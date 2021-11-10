@@ -1,3 +1,10 @@
+/open Item.java
+/open Sword.java
+/open Candle.java
+/open Troll.java
+/open Room.java
+/open actions.jsh
+
 new Room("dining").add(new Candle()).add(new Sword())
 new Room("dining").add(new Candle()).add(new Sword()).go(x -> new Room("mystery", x))
 new Room("dining").add(new Candle()).tick().add(new Sword()).go(x -> new Room("mystery", x))
