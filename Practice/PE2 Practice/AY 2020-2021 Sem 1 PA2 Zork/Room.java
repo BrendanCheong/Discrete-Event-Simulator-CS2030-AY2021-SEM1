@@ -38,6 +38,7 @@ public class Room {
         return new Room(this.name, newItemList, this.pastRoom);
     }
 
+    // removes sword from the room
     public Room stripSword() {
         List<Item> currItemList = new ArrayList<>(this.items);
         List<Item> newItemList = currItemList
@@ -75,26 +76,26 @@ public class Room {
                     // remove the sword from current room
                     // then add theSword: which is a sword that is present, into the newRoom
                     // update the newRoom with the previous room aka current room
-                    currRoom.stripSword();
-                    Room newRoom = func.apply(currRoom.getItems());
-                    newRoom.add(0, theSword);
+                    Room pastRoom = currRoom.stripSword();
+                    Room newRoom = func
+                        .apply(currRoom.getItems())
+                        .add(0, theSword);
                     return new Room(newRoom.getName(), newRoom.getItems(),
-                        Optional.<Room>of(currRoom));
+                        Optional.<Room>of(pastRoom));
                 }
             }
         }
         // if sword is not present ie: sword is not in current room
         // then just apply ad get the new Room and register the past room as current room 
         Room newRoom = func.apply(currRoom.getItems());
-        return new Room(newRoom.getName(), newRoom.getItems(), Optional.<Room>of(currRoom));
+        return new Room(newRoom.getName(), newRoom.getItems(), Optional.<Room>of(this));
     }
 
     public Room back() {
-        boolean pastRoomPresent = this.pastRoom
-            .map((x) -> true)
-            .orElseGet(() -> false);
-        if (pastRoomPresent) {
-            return this.getPastRoomNotNull();
+        Room pastRoom = this.getPastRoomNotNull();
+        
+        if (pastRoom == this) {
+            return this;
         }
 
         for (Item items : this.items) {
@@ -104,7 +105,7 @@ public class Room {
                     // if sword is present in current room
                     // replace past room sword with this room sword
                     // mutate the rest of the items
-                    Room newRoom = this.getPastRoomNotNull()
+                    Room newRoom = pastRoom
                         .stripSword()
                         .add(chosenSword)
                         .tick();
@@ -112,14 +113,14 @@ public class Room {
                 } else {
                     // if sword not present
                     // remove past room sword just to be sure
-                    return this.getPastRoomNotNull()
+                    return pastRoom
                         .stripSword()
                         .tick();
                 }
             }
         }
 
-        return this.getPastRoomNotNull().tick();
+        return pastRoom.tick();
 
     }
 
@@ -138,7 +139,7 @@ public class Room {
     public Room getPastRoomNotNull() {
         return this.pastRoom
             .map((x) -> x)
-            .orElseThrow();
+            .orElseGet(() -> this);
     }
 
     @Override

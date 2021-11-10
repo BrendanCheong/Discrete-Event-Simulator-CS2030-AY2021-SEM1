@@ -15,9 +15,9 @@ Function<? super Room, ? extends Room> takeSword = (room) -> {
             .map((x) -> x)
             .orElseThrow();
         if (chosenSword.checkIfPresent()) {
-            System.out.println("--> you have already taken sword.");
+            System.out.println("--> You have already taken sword.");
         } else {
-            System.out.println("--> you have taken sword.");
+            System.out.println("--> You have taken sword.");
             Sword newSword = (Sword) chosenSword.equipSword();
             // update the current room list
             List<Item> newItemList = currItemList
