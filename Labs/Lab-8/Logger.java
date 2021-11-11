@@ -110,13 +110,18 @@ public class Logger<T> {
     /**
      * Checks if input Logger is equal to current Logger.
      * <p> Non-Loggers will automatically return false </p>
-     * @param logger the Logger inputed, Non-Loggers are allowed
+     * @param obj the Logger inputed, Non-Loggers are allowed
      * @return whether the two Loggers are equal
      */
-    public boolean equals(Logger<T> logger) {
-        Pair<T, List<String>> inputPair = logger.supp.get();
-        Pair<T, List<String>> currentPair = this.supp.get();
-        return inputPair.equals(currentPair);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof Logger) {
+            Logger<?> other = (Logger<?>) obj;
+            return this.supp.equals(other.getSupp());
+        }
+        return false;
     }
 
     /**
