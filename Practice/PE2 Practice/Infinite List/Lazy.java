@@ -10,9 +10,17 @@ public class Lazy<T> {
     private Supplier<? extends T> supplier;
     private boolean evaluated;
 
-    private Lazy(T v) {
-        this.cache = Optional.<T>ofNullable(v);
-        this.supplier = () -> v;
+    /**
+     * Creates a Lazy class that caches a value.
+     * Based on whether the Lazy class has been evaluated 
+     * which happens when the Lazy class has not been mapped/filtered
+     * of creates a supplier, which means that the Lazy class hasn't been called yet
+     * ofNullable means the lazy class has been called
+     * @param cache the chosen cache value
+     */
+    private Lazy(T cache) {
+        this.cache = Optional.<T>ofNullable(cache);
+        this.supplier = () -> cache;
         evaluated = true;   
     }
 
@@ -38,6 +46,10 @@ public class Lazy<T> {
         return new Lazy<>(() -> get().filter(pred).orElseThrow());   
     }
 
+    /**
+     * Gets the cached value, will get cached value lazily.
+     * @return the cached Optional value or Optional.empty if there is no cached value
+     */
     public Optional<T> get() {
         try {
             if (!evaluated) {

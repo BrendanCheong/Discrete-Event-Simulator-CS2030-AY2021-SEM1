@@ -98,6 +98,7 @@ public class InfiniteListImpl<T> implements InfiniteList<T> {
     }
 
     public void forEach(Consumer<? super T> action) {
+        // Consumer(T) => T -> void
         InfiniteListImpl<T> curr = this;
         while(!curr.isEmpty()) {
             curr.head.get().ifPresent(action);
@@ -115,6 +116,7 @@ public class InfiniteListImpl<T> implements InfiniteList<T> {
     }
 
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
+        // BinaryOperator apply(T, T) => (T, T) -> T
         Optional<T> result = head.get();
         InfiniteListImpl<T> curr = this.tail.get().orElseThrow();
         while (!curr.isEmpty()) {
@@ -130,6 +132,7 @@ public class InfiniteListImpl<T> implements InfiniteList<T> {
     }
 
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator) {
+        // BiFunction apply(T, U, V) => (T, U) -> V
         U result = identity;
         InfiniteListImpl<T> curr = this;
         while(!curr.isEmpty()) {
