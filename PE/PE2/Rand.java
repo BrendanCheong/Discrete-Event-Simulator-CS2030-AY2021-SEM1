@@ -9,18 +9,18 @@ public class Rand<T> {
     private final int seed;
     private final boolean started;
     private final Optional<Random> nextVal;
-    private final Optional<Function<T, Rand<T>>> mapper;
+    private final Optional<Function<Integer, T>> mapper;
 
     private Rand(int seed, boolean started, Optional<Random> nextVal, 
-            Optional<Function<T, Rand<T>>> mapper) {
+            Optional<Function<Integer, T>> mapper) {
         this.seed = seed;
         this.started = started;
         this.nextVal = nextVal;
         this.mapper = mapper;
     }
 
-    public static <T> Rand<T> of(int seed) {
-        return new Rand<>(seed, true, Optional.empty(), Optional.empty());
+    public static Rand<Integer> of(int seed) {
+        return new Rand<>(seed, true, Optional.empty(), Optional.of(x -> x));
     }
 
     public Rand<T> next() {
@@ -38,36 +38,42 @@ public class Rand<T> {
         }
     }
 
-    public Stream<Integer> stream() {
+    public Stream<T> stream() {
         UnaryOperator<Integer> operator = (integer) -> {
             int seed = integer;
             int nextVal = Rand.of(seed).next().get();
             return (Integer) nextVal;
         };
-
-        return Stream.iterate(this.seed, operator);
+        return Stream.iterate(this.seed, operator).map(getMapper());
     }
 
     public static <R> Stream<R> randRange(int seed, Function<Integer, ? extends R> func) {
         Rand<Integer> newRandObj = Rand.of(seed);
         Stream<Integer> newStream = newRandObj.stream();
         return newStream.map(func);
-    } 
-
-    public <R> Rand<T> map(Function<T, Rand<T>> mapper) {
-        return new Rand<>(this.seed, this.started, this.nextVal, Optional.of(mapper));
     }
 
-    public <R> int flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
-        return 1;
+    public <R> Rand<R> map(Function<T, R> mapper) {
+        return new Rand<>(this.seed, this.started, this.nextVal, 
+            Optional.of((x) -> mapper.apply(getMapper().apply(x))));
     }
 
-    public int get() {
+    public <R> Rand<R> flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
+        Rand<R> newRand = new Rand<>(seed, started, nextVal, 
+            Optional.of(x -> flatMapper.apply(getMapper().apply(x)).get()));
+        return newRand;
+    }
+
+    public Function<Integer, T> getMapper() {
+        return mapper.map(x -> x).orElseThrow();
+    }
+
+    public T get() {
         // check if function exists
         boolean truth = this.mapper
             .map((x) -> true)
             .orElseGet(() -> false);
-        return this.seed;
+        return getMapper().apply(this.seed);
     }
 
     @Override
