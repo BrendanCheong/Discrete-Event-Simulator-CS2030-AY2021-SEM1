@@ -10,7 +10,7 @@ public class Main {
             .forEach(x -> result.add(x));
         long count = IntStream
             .iterate(0, x -> x + 2)
-            .limit((long) Math.ceil((double) result.size() / 2))
+            .takeWhile(x -> x < result.size())
             .filter(x -> {
                 Point point = new Point(result.get(x), result.get(x + 1));
                 return circle.contains(point);
