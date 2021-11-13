@@ -9,10 +9,10 @@ public class Rand<T> {
     private final int seed;
     private final boolean started;
     private final Optional<Random> nextVal;
-    private final Optional<Function<T, Rand<T>> mapper;
+    private final Optional<Function<T, Rand<T>>> mapper;
 
     private Rand(int seed, boolean started, Optional<Random> nextVal, 
-            Optional<Function<Rand<T>, Rand<T>> mapper) {
+            Optional<Function<T, Rand<T>>> mapper) {
         this.seed = seed;
         this.started = started;
         this.nextVal = nextVal;
@@ -29,12 +29,12 @@ public class Rand<T> {
             Random newRand = new Random(this.seed);
             int newSeed = newRand.nextInt(Integer.MAX_VALUE);
             Optional<Random> newVal = Optional.of(new Random(newSeed));
-            return new Rand<>(newSeed, false, newVal);
+            return new Rand<>(newSeed, false, newVal, this.mapper);
         } else {
             Random newRand = new Random(this.seed);
             int newSeed = newRand.nextInt(Integer.MAX_VALUE);
             Optional<Random> newVal = Optional.of(new Random(newSeed));
-            return new Rand<>(newSeed, false, newVal);
+            return new Rand<>(newSeed, false, newVal, this.mapper);
         }
     }
 
@@ -54,8 +54,8 @@ public class Rand<T> {
         return newStream.map(func);
     } 
 
-    public Rand<T> map(Function<T, Rand<T>> mapper) {
-        return new Rand<>(this.seed, this.started, this.nextVal, mapper);
+    public <R> Rand<T> map(Function<T, Rand<T>> mapper) {
+        return new Rand<>(this.seed, this.started, this.nextVal, Optional.of(mapper));
     }
 
     public <R> int flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
@@ -68,5 +68,10 @@ public class Rand<T> {
             .map((x) -> true)
             .orElseGet(() -> false);
         return this.seed;
+    }
+
+    @Override
+    public String toString() {
+        return "Rand";
     }
 }
