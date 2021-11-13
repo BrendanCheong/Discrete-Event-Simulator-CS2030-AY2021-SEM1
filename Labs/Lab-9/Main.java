@@ -23,15 +23,20 @@ public class Main {
         Instant start = Instant.now();
         Scanner sc = new Scanner(System.in);
         List<CompletableFuture<String>> answers = new ArrayList<>();
-        while (sc.hasNext()) {
-            BusStop srcId = new BusStop(sc.next());
-            String searchString = sc.next();
+        // MY FRIENDSHIP ENDED WITH LOOPS
+        // NOW STREAMS ARE MY NEW BEST FRIEND
+        IntStream
+            .iterate(0, (x) -> x + 1)
+            .takeWhile((n) -> sc.hasNext())
+            .forEach((x) -> {
+                BusStop srcId = new BusStop(sc.next());
+                String searchString = sc.next();
 
-            CompletableFuture<String> routes = BusSg
-                .findBusServicesBetween(srcId, searchString)
-                .thenCompose((route) -> route.description());
-            answers.add(routes);
-        }
+                CompletableFuture<String> routes = BusSg
+                    .findBusServicesBetween(srcId, searchString)
+                    .thenCompose((route) -> route.description());
+                answers.add(routes);
+            });
         sc.close();
 
         CompletableFuture<?>[] joinedAnswers = new CompletableFuture<?>[answers.size()];
@@ -43,6 +48,7 @@ public class Main {
             .join();
         
         // execute and print out each completed future
+        // no for loops they are disgusting
         List<CompletableFuture<?>> iterableFutures = new ArrayList<>(Arrays.asList(joinedAnswers));
         IntStream
             .range(0, iterableFutures.size())

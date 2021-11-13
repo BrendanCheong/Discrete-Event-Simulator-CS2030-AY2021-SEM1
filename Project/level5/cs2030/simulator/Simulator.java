@@ -101,31 +101,30 @@ public class Simulator {
         List<Integer> numberOfServedCustomers = new ArrayList<>();
         List<Integer> numberOfLeftCustomers = new ArrayList<>();
         List<Double> totalWaitingTime = new ArrayList<>();
-        while (!this.eventQueue.isEmpty()) {
-            Event event = this.eventQueue.poll();
-            
-            try {
-                Optional<Event> selectedEvent = event.mutate(this.serverList);
-                Event eventToAdd = selectedEvent
-                    .map((x) -> x)
-                    .orElseThrow();
+        IntStream
+            .iterate(0, (x) -> x + 1)
+            .takeWhile((condition) -> !this.eventQueue.isEmpty())
+            .forEachOrdered((iteration) -> {
+                Event event = this.eventQueue.poll();
+                try {
+                    Optional<Event> selectedEvent = event.mutate(this.serverList);
+                    Event eventToAdd = selectedEvent
+                        .map((x) -> x)
+                        .orElseThrow();
 
-                if (eventToAdd.isServedEvent()) {
-                    double newWaitingTime = eventToAdd.getCustomerNotNull().getWaitingTime();
+                    if (eventToAdd.isServedEvent()) {
+                        double newWaitingTime = eventToAdd.getCustomerNotNull().getWaitingTime();
 
-                    numberOfServedCustomers.add(1);
-                    totalWaitingTime.add(newWaitingTime);
-
-                } else if (eventToAdd.isLeaveEvent()) {
-
-                    numberOfLeftCustomers.add(1);
+                        numberOfServedCustomers.add(1);
+                        totalWaitingTime.add(newWaitingTime);
+                    } else if (eventToAdd.isLeaveEvent()) {
+                        numberOfLeftCustomers.add(1);
+                    }
+                    this.eventQueue.add(eventToAdd);
+                } catch (NoSuchElementException e) {
+                    String dummy = "Streams are better than while loops";
                 }
-
-                this.eventQueue.add(eventToAdd);
-            } catch (NoSuchElementException e) {
-                continue;
-            }
-        }
+            });
         Statistics stats = new Statistics(numberOfServedCustomers, 
             numberOfLeftCustomers, totalWaitingTime);
         System.out.println(stats);
