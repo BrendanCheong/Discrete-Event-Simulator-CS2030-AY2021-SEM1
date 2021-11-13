@@ -1,4 +1,5 @@
 public abstract class Lesson {
+    
     private final String moduleCode;
     private final int classId;
     private final String venueId;
