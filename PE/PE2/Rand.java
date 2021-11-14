@@ -49,9 +49,8 @@ public class Rand<T> {
     }
 
     public <R> Rand<R> flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
-        Rand<R> newRand = new Rand<>(seed, nextVal, 
+        return new Rand<>(seed, nextVal, 
             Optional.of(x -> flatMapper.apply(getMapper().apply(x)).get()));
-        return newRand;
     }
 
     public Function<Integer, T> getMapper() {
