@@ -7,35 +7,25 @@ import java.util.stream.Stream;
 public class Rand<T> {
 
     private final int seed;
-    private final boolean started;
     private final Optional<Random> nextVal;
     private final Optional<Function<Integer, T>> mapper;
 
-    private Rand(int seed, boolean started, Optional<Random> nextVal, 
+    private Rand(int seed, Optional<Random> nextVal, 
             Optional<Function<Integer, T>> mapper) {
         this.seed = seed;
-        this.started = started;
         this.nextVal = nextVal;
         this.mapper = mapper;
     }
 
     public static Rand<Integer> of(int seed) {
-        return new Rand<>(seed, true, Optional.empty(), Optional.of(x -> x));
+        return new Rand<>(seed, Optional.empty(), Optional.of(x -> x));
     }
 
     public Rand<T> next() {
-
-        if (started) {
-            Random newRand = new Random(this.seed);
-            int newSeed = newRand.nextInt(Integer.MAX_VALUE);
-            Optional<Random> newVal = Optional.of(new Random(newSeed));
-            return new Rand<>(newSeed, false, newVal, this.mapper);
-        } else {
-            Random newRand = new Random(this.seed);
-            int newSeed = newRand.nextInt(Integer.MAX_VALUE);
-            Optional<Random> newVal = Optional.of(new Random(newSeed));
-            return new Rand<>(newSeed, false, newVal, this.mapper);
-        }
+        Random newRand = new Random(this.seed);
+        int newSeed = newRand.nextInt(Integer.MAX_VALUE);
+        Optional<Random> newVal = Optional.<Random>of(new Random(newSeed));
+        return new Rand<>(newSeed, newVal, this.mapper);
     }
 
     public Stream<T> stream() {
@@ -54,12 +44,12 @@ public class Rand<T> {
     }
 
     public <R> Rand<R> map(Function<T, R> mapper) {
-        return new Rand<>(this.seed, this.started, this.nextVal, 
+        return new Rand<>(this.seed, this.nextVal, 
             Optional.of((x) -> mapper.apply(getMapper().apply(x))));
     }
 
     public <R> Rand<R> flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
-        Rand<R> newRand = new Rand<>(seed, started, nextVal, 
+        Rand<R> newRand = new Rand<>(seed, nextVal, 
             Optional.of(x -> flatMapper.apply(getMapper().apply(x)).get()));
         return newRand;
     }
@@ -69,10 +59,6 @@ public class Rand<T> {
     }
 
     public T get() {
-        // check if function exists
-        boolean truth = this.mapper
-            .map((x) -> true)
-            .orElseGet(() -> false);
         return getMapper().apply(this.seed);
     }
 
