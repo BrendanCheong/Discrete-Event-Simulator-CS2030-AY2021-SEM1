@@ -45,12 +45,12 @@ public class Rand<T> {
 
     public <R> Rand<R> map(Function<T, R> mapper) {
         return new Rand<>(this.seed, this.nextVal, 
-            Optional.of((x) -> mapper.apply(getMapper().apply(x))));
+            Optional.of(mapper.compose(getMapper())));
     }
 
-    public <R> Rand<R> flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {
-        return new Rand<>(seed, nextVal, 
-            Optional.of(x -> flatMapper.apply(getMapper().apply(x)).get()));
+    public <R> Rand<R> flatMap(Function<? super T, ? extends Rand<R>> flatMapper) {;
+        Function<Rand<R>, R> unwrapper = x -> x.get();
+        return map(unwrapper.compose(flatMapper));
     }
 
     public Function<Integer, T> getMapper() {

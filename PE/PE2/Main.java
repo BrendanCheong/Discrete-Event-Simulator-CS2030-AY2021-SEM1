@@ -5,7 +5,7 @@ public class Main {
     public static double simulate(int seed, int n) {
         ArrayList<Double> result = new ArrayList<Double>();
         Circle circle = new Circle(new Point(0, 0), 1.0);
-        Rand.randRange(seed, x -> (2.0) * x / (Integer.MAX_VALUE - 1) - 1.0)
+        Rand.randRange(seed, x -> 2.0 * x / (Integer.MAX_VALUE - 1) - 1.0)
             .limit(n * 2)
             .forEach(x -> result.add(x));
         long count = IntStream
@@ -16,6 +16,6 @@ public class Main {
                 return circle.contains(point);
             })
             .count();
-        return (double) count * 4 / n;
+        return count * 4.0 / n;
     }
 }
