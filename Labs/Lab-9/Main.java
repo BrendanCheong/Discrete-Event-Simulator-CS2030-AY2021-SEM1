@@ -50,11 +50,10 @@ public class Main {
         // execute and print out each completed future
         // no for loops they are disgusting
         List<CompletableFuture<?>> iterableFutures = new ArrayList<>(Arrays.asList(joinedAnswers));
-        IntStream
-            .range(0, iterableFutures.size())
+        iterableFutures
+            .stream()
             .parallel()
-            .forEachOrdered((index) -> {
-                CompletableFuture<?> description = iterableFutures.get(index);
+            .forEachOrdered((description) -> {
                 description
                     .thenAccept((x) -> System.out.println(x));
             });
