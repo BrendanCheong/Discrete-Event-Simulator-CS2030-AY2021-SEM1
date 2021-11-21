@@ -1,0 +1,7 @@
+Yes, it is a functor. Box map is an identity function x -> x, where the map does not change the functor.
+Moreover, if Box is a composition of two functions g . h, then the resulting functor should be the same as calling f with hand then with g.
+To showcase this, the following test cases should all be true:
+
+Box b = Box.of("Hello I am dibbo!")
+b.equals(b.map(x -> x))
+b.map(x -> x + " the gift ").map(x -> x + "dragon").equals(b.map(x -> (x + " the gift ") + "dragon"))

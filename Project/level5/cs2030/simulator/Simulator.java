@@ -101,30 +101,31 @@ public class Simulator {
         List<Integer> numberOfServedCustomers = new ArrayList<>();
         List<Integer> numberOfLeftCustomers = new ArrayList<>();
         List<Double> totalWaitingTime = new ArrayList<>();
-        IntStream
-            .iterate(0, (x) -> x + 1)
-            .takeWhile((condition) -> !this.eventQueue.isEmpty())
-            .forEachOrdered((iteration) -> {
-                Event event = this.eventQueue.poll();
-                try {
-                    Optional<Event> selectedEvent = event.mutate(this.serverList);
-                    Event eventToAdd = selectedEvent
-                        .map((x) -> x)
-                        .orElseThrow();
+        while (!this.eventQueue.isEmpty()) {
+            Event event = this.eventQueue.poll();
+            
+            try {
+                Optional<Event> selectedEvent = event.mutate(this.serverList);
+                Event eventToAdd = selectedEvent
+                    .map((x) -> x)
+                    .orElseThrow();
 
-                    if (eventToAdd.isServedEvent()) {
-                        double newWaitingTime = eventToAdd.getCustomerNotNull().getWaitingTime();
+                if (eventToAdd.isServedEvent()) {
+                    double newWaitingTime = eventToAdd.getCustomerNotNull().getWaitingTime();
 
-                        numberOfServedCustomers.add(1);
-                        totalWaitingTime.add(newWaitingTime);
-                    } else if (eventToAdd.isLeaveEvent()) {
-                        numberOfLeftCustomers.add(1);
-                    }
-                    this.eventQueue.add(eventToAdd);
-                } catch (NoSuchElementException e) {
-                    String dummy = "Streams are better than while loops";
+                    numberOfServedCustomers.add(1);
+                    totalWaitingTime.add(newWaitingTime);
+
+                } else if (eventToAdd.isLeaveEvent()) {
+
+                    numberOfLeftCustomers.add(1);
                 }
-            });
+
+                this.eventQueue.add(eventToAdd);
+            } catch (NoSuchElementException e) {
+                continue;
+            }
+        }
         Statistics stats = new Statistics(numberOfServedCustomers, 
             numberOfLeftCustomers, totalWaitingTime);
         System.out.println(stats);
@@ -143,7 +144,7 @@ public class Simulator {
         boolean useRandomMachine = this.levelStatus == RANDOMNESS_LEVEL;
         IntStream
             .range(0, numberOfServers)
-            .forEachOrdered((index) -> {
+            .forEach((index) -> {
                 Server server = new Server(index + 1, queueAmount, this.restTimeArray,
                     restingProb, rng, useRandomMachine);
                 this.serverList.add(server);
@@ -151,7 +152,7 @@ public class Simulator {
 
         IntStream
             .range(0, selfCheckOut)
-            .forEachOrdered((index) -> {
+            .forEach((index) -> {
                 SelfCheckoutServer server = new SelfCheckoutServer(index + numberOfServers,
                     queueAmount, this.restTimeArray, restingProb, rng, useRandomMachine);
                 this.serverList.add(server);
