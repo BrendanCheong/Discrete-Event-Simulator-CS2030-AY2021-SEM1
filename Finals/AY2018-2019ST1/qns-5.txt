@@ -1,0 +1,20 @@
+For Single-Responsibility Principle, each lambda is set to perform a single task and each stream is self-contained and only performs one task, thus both lambdas and streams follow the first principle.
+
+For Open-closed principle, streams and lambdas are open for extenstion but cannot be changed once they are created. Functional interfaces are open to extension by virtue of being Generically typed, allowing it to apply functional operations on any valid class, but are closed for modification of the underlying implementation.
+For example: this is not allowed for lambdas
+
+int x = 0
+Runnable<Integer> r = () -> System.out.println(x);
+x += 1;
+As this would violate the open closed principle as you cannot change x since the lambda in particular will not update if x was changed outside of the runnable.
+
+For Liskov-Substitution principle, streams makes use of this principle through its use of generics. For example, streams can allow itself to take in subclasses of a supertype, thus allowing a stream of superclasses that can be replaced by the subclasses. For example:
+List<T> list = List.of(T1, T2, T3);
+Stream<? extends T> streamer(List<T> list) {
+    return list
+        .mapToObj((x) -> doSomething(x))
+        .stream();
+}
+the method doSomething() can covert the list into a subclass of T and it will still compile due to it fufilling Liskov Principle.
+The same can be said for lambdas and Functions using generic typing like
+Function<? super T, ? extends T>, where the function takes in an input aka the superclass and outputs a subclass of the type T thus fulfilling liskov principle as this compiles and functional operators allows the inheritance of classes of the superclasses.
