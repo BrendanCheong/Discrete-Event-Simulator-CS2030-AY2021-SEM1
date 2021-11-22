@@ -7,6 +7,7 @@ filetype plugin on
 filetype indent on
 set linebreak
 set laststatus=2
+set clipboard=unnamedplus
 set backspace=indent,eol,start
 set showcmd
 set nu
@@ -169,3 +170,12 @@ let java_highlight_all = 1
 highlight link javaScopeDecl Statement
 highlight link javaType Type
 highlight link javaDocTags PreProc
+
+" WSL yank support
+let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+if executable(s:clip)
+    augroup WSLYank
+        autocmd!
+        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+    augroup END
+endif
