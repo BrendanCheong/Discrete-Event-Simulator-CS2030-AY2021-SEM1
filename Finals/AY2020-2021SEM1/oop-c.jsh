@@ -1,23 +1,41 @@
-class A {
-    private final A other;
+public abstract class O {
+    private final Object other;
 
-    public A() {
+    public O() {
         this.other = null;
     }
 
-    protected A(A other) {
+    protected O(Object other) {
         this.other = other;
     }
 
-    A set(A other) {
-        return new A(other);
+    public Object get() {
+        return this.other;
     }
 
-    A get() {
-        return this.other;
+    public abstract O set(Object other);
+}
+
+public class A extends O {
+
+    public A(Object other) {
+        super(other);
+    }
+
+    @Override
+    public O set(Object other) {
+        return new A(other);
     }
 }
 
-class B extends A {
+public class B extends O {
 
+    public B(Object other) {
+        super(other);
+    }
+
+    @Override
+    public O set(Object other) {
+        return new B(other);
+    }
 }
