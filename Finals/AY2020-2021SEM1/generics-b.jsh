@@ -38,5 +38,10 @@ public class WinterMelon extends Melon {
 
 List<Melon> waterMelons = new ArrayList<>(List.of(new WaterMelon(10, "yellow WaterMelon"), new WaterMelon(20, "green WaterMelon")));
 List<Melon> winterMelons = new ArrayList<>(List.of(new WinterMelon(1, "red winterMelon"), new WinterMelon(2, "purple winterMelon")));
-replace(waterMelons, winterMelons)
+BiPredicate<? super Melon, ? super Melon> pred = (m1, m2) -> {
+    if (m1.compareTo(m2) > 0) {
+        return true;
+    } return false;
+}
+replace(waterMelons, winterMelons, pred);
 winterMelons

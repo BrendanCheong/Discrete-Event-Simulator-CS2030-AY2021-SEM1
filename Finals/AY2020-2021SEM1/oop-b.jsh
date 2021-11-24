@@ -1,11 +1,11 @@
 public abstract class O {
-    private Object other;
+    private O other;
 
-    public Object get() {
+    public O get() {
         return this.other;
     }
 
-    public void set(Object other) {
+    public void set(O other) {
         this.other = other;
     }
 }

@@ -1,7 +1,7 @@
-void replace(List<? extends T> src, List<? super T> dst) {
+void replace(List<T> src, List<T> dst, BiPredicate<? super T, ? super T> pred) {
     if (src.size() == dst.size()) {
         for (int i = 0; i < src.size(); i++) {
-            if (src.get(i).compareTo(dst.get(i)) > 0) {
+            if (pred.test(src.get(i), dst.get(i))) {
                 dst.set(i, src.get(i));
             }
         }
