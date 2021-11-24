@@ -1,49 +1,58 @@
-public abstract class O {
-    private final O other;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
-    public O() {
-        this.other = null;
-    }
+abstract class Base {
+    private final Supplier<Base> other;
 
-    protected O(O other) {
+    protected Base(Supplier<Base> other) {
         this.other = other;
     }
 
-    public O get() {
-        return this.other;
-    }
+    abstract Base set(Base other);
+    abstract Base set(Supplier<Base> other);
 
-    public abstract O set(O other);
+    Base get() {
+        return other.get();
+    }
 }
 
-public class A extends O {
-
+class A extends Base {
     public A() {
-        super(null);
+        super(() -> null);
     }
 
-    private A(O other) {
+    private A(Supplier<Base> other) {
         super(other);
     }
 
     @Override
-    public O set(O other) {
+    A set(Base other) {
+        return new A(() -> other);
+    }
+
+    @Override
+    A set(Supplier<Base> other) {
         return new A(other);
     }
 }
 
-public class B extends O {
-
+class B extends Base {
     public B() {
-        super(null);
+        super(() -> null);
     }
 
-    private B(O other) {
+    private B(Supplier<Base> other) {
         super(other);
     }
 
     @Override
-    public O set(O other) {
+    B set(Base other) {
+        return new B(() -> other);
+    }
+
+    @Override
+    B set(Supplier<Base> other) {
         return new B(other);
     }
 }
