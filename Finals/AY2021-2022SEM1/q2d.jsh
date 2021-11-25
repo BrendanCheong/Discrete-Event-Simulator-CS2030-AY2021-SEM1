@@ -1,0 +1,1 @@
+toggling(new TrafficLight("amber"), 7);
